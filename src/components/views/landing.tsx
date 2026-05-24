@@ -1,4 +1,5 @@
 import { Link } from "waku";
+import { presets } from "@love-rox/ptpt-core";
 import { PatapataBoard } from "@love-rox/ptpt-react";
 import "@love-rox/ptpt-core/styles.css";
 import { Meta } from "@/components/global/meta";
@@ -149,7 +150,7 @@ export default async function LandingView({ locale }: { locale: Locale }) {
                   departure display. The protagonist of the hero. */}
               <div className="relative flex items-center justify-center min-h-[clamp(14rem,40vw,20rem)]">
                 <PatapataBoard
-                  cellOptions={{ preset: "alphanumeric" }}
+                  cellOptions={{ preset: presets.alphanumeric }}
                   targets={HERO_SAMPLE}
                   flipMode="replace"
                   className="ptpt-board"

@@ -17,11 +17,10 @@
     "test": "bun test"
   },
   "dependencies": {
-    "@fontsource/cormorant-garamond": "^5.2.11",
-    "@fontsource/inter-tight": "^5.2.7",
-    "@fontsource/jetbrains-mono": "^5.2.8",
-    "@fontsource/shippori-mincho-b1": "^5.2.8",
-    "@fontsource/zen-kaku-gothic-new": "^5.2.7",
+    "@fontsource/archivo": "^5.2.5",
+    "@fontsource/biz-udgothic": "^5.2.5",
+    "@fontsource/martian-mono": "^5.2.5",
+    "@fontsource/saira-condensed": "^5.2.5",
     "@love-rox/ptpt-core": "file:../ptpt/packages/ptpt-core",
     "@love-rox/ptpt-react": "file:../ptpt/packages/ptpt-react",
     "@tailwindcss/typography": "^0.5.19",

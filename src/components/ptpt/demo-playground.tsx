@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { presets } from "@love-rox/ptpt-core";
 import { PatapataBoard } from "@love-rox/ptpt-react";
 import "@love-rox/ptpt-core/styles.css";
 
@@ -209,7 +210,7 @@ export function DemoPlayground({ lang }: { lang: Lang }) {
           }}
         >
           <PatapataBoard
-            cellOptions={{ preset }}
+            cellOptions={{ preset: presets[preset] }}
             targets={targets}
             flipMode={flipMode}
             className="ptpt-board"

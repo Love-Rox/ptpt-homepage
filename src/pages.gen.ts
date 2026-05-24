@@ -16,25 +16,25 @@ import type { getConfig as File_BlogIndex_getConfig } from './pages/blog/index';
 // prettier-ignore
 import type { getConfig as File_Demo_getConfig } from './pages/demo';
 // prettier-ignore
-import type { getConfig as File_En404_getConfig } from './pages/en/404';
-// prettier-ignore
-import type { getConfig as File_EnAstro_getConfig } from './pages/en/astro';
-// prettier-ignore
-import type { getConfig as File_EnBlogSlug_getConfig } from './pages/en/blog/[slug]';
-// prettier-ignore
-import type { getConfig as File_EnBlogIndex_getConfig } from './pages/en/blog/index';
-// prettier-ignore
-import type { getConfig as File_EnDemo_getConfig } from './pages/en/demo';
-// prettier-ignore
-import type { getConfig as File_EnIndex_getConfig } from './pages/en/index';
-// prettier-ignore
-import type { getConfig as File_EnReact_getConfig } from './pages/en/react';
-// prettier-ignore
-import type { getConfig as File_EnRehype_getConfig } from './pages/en/rehype';
-// prettier-ignore
-import type { getConfig as File_EnVue_getConfig } from './pages/en/vue';
-// prettier-ignore
 import type { getConfig as File_Index_getConfig } from './pages/index';
+// prettier-ignore
+import type { getConfig as File_Ja404_getConfig } from './pages/ja/404';
+// prettier-ignore
+import type { getConfig as File_JaAstro_getConfig } from './pages/ja/astro';
+// prettier-ignore
+import type { getConfig as File_JaBlogSlug_getConfig } from './pages/ja/blog/[slug]';
+// prettier-ignore
+import type { getConfig as File_JaBlogIndex_getConfig } from './pages/ja/blog/index';
+// prettier-ignore
+import type { getConfig as File_JaDemo_getConfig } from './pages/ja/demo';
+// prettier-ignore
+import type { getConfig as File_JaIndex_getConfig } from './pages/ja/index';
+// prettier-ignore
+import type { getConfig as File_JaReact_getConfig } from './pages/ja/react';
+// prettier-ignore
+import type { getConfig as File_JaRehype_getConfig } from './pages/ja/rehype';
+// prettier-ignore
+import type { getConfig as File_JaVue_getConfig } from './pages/ja/vue';
 // prettier-ignore
 import type { getConfig as File_React_getConfig } from './pages/react';
 // prettier-ignore
@@ -50,16 +50,16 @@ type Page =
 | ({ path: '/blog/[slug]' } & GetConfigResponse<typeof File_BlogSlug_getConfig>)
 | ({ path: '/blog' } & GetConfigResponse<typeof File_BlogIndex_getConfig>)
 | ({ path: '/demo' } & GetConfigResponse<typeof File_Demo_getConfig>)
-| ({ path: '/en/404' } & GetConfigResponse<typeof File_En404_getConfig>)
-| ({ path: '/en/astro' } & GetConfigResponse<typeof File_EnAstro_getConfig>)
-| ({ path: '/en/blog/[slug]' } & GetConfigResponse<typeof File_EnBlogSlug_getConfig>)
-| ({ path: '/en/blog' } & GetConfigResponse<typeof File_EnBlogIndex_getConfig>)
-| ({ path: '/en/demo' } & GetConfigResponse<typeof File_EnDemo_getConfig>)
-| ({ path: '/en' } & GetConfigResponse<typeof File_EnIndex_getConfig>)
-| ({ path: '/en/react' } & GetConfigResponse<typeof File_EnReact_getConfig>)
-| ({ path: '/en/rehype' } & GetConfigResponse<typeof File_EnRehype_getConfig>)
-| ({ path: '/en/vue' } & GetConfigResponse<typeof File_EnVue_getConfig>)
 | ({ path: '/' } & GetConfigResponse<typeof File_Index_getConfig>)
+| ({ path: '/ja/404' } & GetConfigResponse<typeof File_Ja404_getConfig>)
+| ({ path: '/ja/astro' } & GetConfigResponse<typeof File_JaAstro_getConfig>)
+| ({ path: '/ja/blog/[slug]' } & GetConfigResponse<typeof File_JaBlogSlug_getConfig>)
+| ({ path: '/ja/blog' } & GetConfigResponse<typeof File_JaBlogIndex_getConfig>)
+| ({ path: '/ja/demo' } & GetConfigResponse<typeof File_JaDemo_getConfig>)
+| ({ path: '/ja' } & GetConfigResponse<typeof File_JaIndex_getConfig>)
+| ({ path: '/ja/react' } & GetConfigResponse<typeof File_JaReact_getConfig>)
+| ({ path: '/ja/rehype' } & GetConfigResponse<typeof File_JaRehype_getConfig>)
+| ({ path: '/ja/vue' } & GetConfigResponse<typeof File_JaVue_getConfig>)
 | ({ path: '/react' } & GetConfigResponse<typeof File_React_getConfig>)
 | ({ path: '/rehype' } & GetConfigResponse<typeof File_Rehype_getConfig>)
 | ({ path: '/vue' } & GetConfigResponse<typeof File_Vue_getConfig>);

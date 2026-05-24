@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { presets } from "@love-rox/ptpt-core";
+import { delays, presets } from "@love-rox/ptpt-core";
 import { PatapataBoard } from "@love-rox/ptpt-react";
 import "@love-rox/ptpt-core/styles.css";
 
@@ -9,37 +9,37 @@ type Lang = "en" | "ja";
 
 const copy = {
   en: {
-    boardLabel: "Departure board",
+    targetLabel: "Destination",
+    targetHint: "Type, and the board arrives at it.",
+    quickLabel: "Quick picks",
     presetLabel: "Preset",
-    autoLabel: "Auto-cycle",
     flipModeLabel: "Flip mode",
-    nextLabel: "Flip now",
+    staggerLabel: "Stagger",
     sectionControls: "Controls",
     sectionPreview: "Board",
     sectionMarkup: "Markup",
-    note: "A `PatapataBoard` of split-flap cells. Each cell flips through the chosen `preset`; the board staggers the cells so the whole row ripples like a real departure display. Toggle `flipMode` to compare `replace` (coalesce to the latest) vs `queue` (run each in order).",
-    destinations: ["TOKYO", "OSAKA", "KYOTO", "NAGOYA", "SAPORO"],
+    note: "Type a destination — the board doesn't show it, it arrives at it, each cell flipping through the chosen preset. Stagger is the gap between cells (delays.wave): raise it and the row ripples; set it to 0 and every cell flips at once. flipMode compares replace (coalesce to the latest target) and queue (run each change in order).",
     presetLabels: {
-      alpha: "alpha — A–Z + blank",
       alphanumeric: "alphanumeric — A–Z, 0–9",
+      alpha: "alpha — A–Z + blank",
       digits: "digits — 0–9",
       default: "default — built-in set",
     },
   },
   ja: {
-    boardLabel: "発車案内板",
+    targetLabel: "行先（文字）",
+    targetHint: "入力すると、盤面がそこへ到着します。",
+    quickLabel: "クイック選択",
     presetLabel: "プリセット (preset)",
-    autoLabel: "自動でめくる",
     flipModeLabel: "フリップモード",
-    nextLabel: "いま、めくる",
+    staggerLabel: "めくり間隔",
     sectionControls: "操作盤",
     sectionPreview: "盤面",
     sectionMarkup: "出力",
-    note: "パタパタ（split-flap）セルを並べた `PatapataBoard` です。各セルは選んだ `preset` のフラップをめくり、盤面はセルをずらして動かすので、本物の発車案内板のように一行が波打ちます。`flipMode` を切り替えると、`replace`（最新だけ）と `queue`（順番に）の違いを比べられます。",
-    destinations: ["トウキヨウ", "オオサカ", "キヨウト", "ナゴヤ", "サツポロ"],
+    note: "行先を入力すると、盤面はそれを「表示」するのではなく、そこへ到着します。各セルは選んだ preset のフラップをめくります。めくり間隔（delays.wave）はセル間のずれで、上げると一行が波打ち、0 にすると一斉にめくれます。flipMode は replace（最新の目標だけ追う）と queue（変更を順番に消化）を比べられます。",
     presetLabels: {
-      alpha: "alpha — A–Z + 空白",
       alphanumeric: "alphanumeric — A–Z, 0–9",
+      alpha: "alpha — A–Z + 空白",
       digits: "digits — 0–9",
       default: "default — 標準セット",
     },
@@ -49,9 +49,21 @@ const copy = {
 const PRESETS = ["alphanumeric", "alpha", "digits", "default"] as const;
 type PresetKey = (typeof PRESETS)[number];
 
-// English destinations padded to a fixed board width.
-const WIDTH = 7;
-const EN_TARGETS = ["TOKYO", "OSAKA", "KYOTO", "NAGOYA", "SAPPORO"];
+const WIDTH = 8;
+
+const DEFAULT_TARGET: Record<PresetKey, string> = {
+  alphanumeric: "TOKYO",
+  alpha: "TOKYO",
+  default: "PTPT",
+  digits: "0042",
+};
+
+const QUICK_PICKS: Record<PresetKey, string[]> = {
+  alphanumeric: ["TOKYO", "OSAKA", "GATE 7", "LONDON"],
+  alpha: ["TOKYO", "OSAKA", "KYOTO", "LONDON"],
+  default: ["PTPT", "HELLO!", "12:45", "TRACK 3"],
+  digits: ["0042", "0117", "2026", "0506"],
+};
 
 function pad(word: string, width: number): string {
   return word.slice(0, width).padEnd(width, " ");
@@ -94,37 +106,34 @@ export function DemoPlayground({ lang }: { lang: Lang }) {
   const t = copy[lang];
   const [preset, setPreset] = useState<PresetKey>("alphanumeric");
   const [flipMode, setFlipMode] = useState<"replace" | "queue">("replace");
-  const [auto, setAuto] = useState(true);
-  const [index, setIndex] = useState(0);
+  const [stagger, setStagger] = useState(60);
+  const [target, setTarget] = useState(DEFAULT_TARGET.alphanumeric);
 
-  // English destinations work with the alpha/alphanumeric presets; for digits
-  // we show a numeric track number instead so every cell has a valid frame.
-  const words = useMemo(
-    () => (preset === "digits" ? ["0042", "0117", "0238", "1024", "0506"] : EN_TARGETS),
-    [preset],
-  );
+  // Characters the current preset can actually show (always includes blank).
+  const allowed = useMemo(() => new Set(presets[preset].chars), [preset]);
 
+  // Uppercase + keep only flappable characters, capped at the board width.
+  const sanitize = (raw: string): string =>
+    [...raw.toUpperCase()]
+      .filter((c) => allowed.has(c))
+      .join("")
+      .slice(0, WIDTH);
+
+  // When the preset changes, drop to a destination that's valid for it.
   useEffect(() => {
-    if (!auto) return;
-    const id = setInterval(() => setIndex((i) => (i + 1) % words.length), 2600);
-    return () => clearInterval(id);
-  }, [auto, words.length]);
+    setTarget(DEFAULT_TARGET[preset]);
+  }, [preset]);
 
-  // Reset the index when the word set changes so we never point past the end.
-  useEffect(() => {
-    setIndex(0);
-  }, [words]);
+  const targets = pad(target, WIDTH);
+  const delayFn = useMemo(() => delays.wave({ step: stagger }), [stagger]);
 
-  const current = words[index] ?? words[0] ?? "";
-  const width = preset === "digits" ? 4 : WIDTH;
-  const targets = pad(current, width);
-
-  const markup = `import { presets } from "@love-rox/ptpt-core";
+  const markup = `import { presets, delays } from "@love-rox/ptpt-core";
 
 <PatapataBoard
   cellOptions={{ preset: presets.${preset} }}
   targets="${escape(targets)}"
   flipMode="${flipMode}"
+  delayFn={delays.wave({ step: ${stagger} })}
 />`;
 
   return (
@@ -132,6 +141,48 @@ export function DemoPlayground({ lang }: { lang: Lang }) {
       {/* —— Controls panel —————————————————————————————————————————— */}
       <section className="mb-12">
         <PanelHeading>{t.sectionControls}</PanelHeading>
+
+        {/* Destination input — the primary control */}
+        <div className="mb-8">
+          <Field label={t.targetLabel}>
+            <input
+              type="text"
+              value={target}
+              onChange={(e) => setTarget(sanitize(e.target.value))}
+              placeholder={DEFAULT_TARGET[preset]}
+              spellCheck={false}
+              autoComplete="off"
+              maxLength={WIDTH}
+              className={`${inputCls} w-full text-lg tracking-[0.25em] uppercase ${inputUnderlineFocus}`}
+              style={inputUnderline}
+            />
+          </Field>
+          <p className="mt-2 font-gothic text-[11px] text-ink-soft">{t.targetHint}</p>
+
+          {/* Quick picks */}
+          <div className="mt-4 flex flex-wrap items-center gap-2">
+            <span className="font-gothic text-[10px] uppercase tracking-[0.25em] text-ink-soft mr-1">
+              {t.quickLabel}
+            </span>
+            {QUICK_PICKS[preset].map((word) => {
+              const active = target === sanitize(word);
+              return (
+                <button
+                  key={word}
+                  type="button"
+                  onClick={() => setTarget(sanitize(word))}
+                  className={`font-mono text-[11px] px-2.5 py-1 border transition-colors ${
+                    active
+                      ? "text-shu border-shu"
+                      : "text-ink-mute border-rule hover:text-ink hover:border-rule-strong"
+                  }`}
+                >
+                  {word}
+                </button>
+              );
+            })}
+          </div>
+        </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-10 gap-y-6">
           <Field label={t.presetLabel}>
@@ -161,42 +212,18 @@ export function DemoPlayground({ lang }: { lang: Lang }) {
             </select>
           </Field>
 
-          <div className="flex items-end gap-6">
-            <label className="flex items-center gap-3 cursor-pointer pb-1.5">
-              <span
-                className="relative inline-block w-9 h-4 transition-colors"
-                style={{
-                  border: "1px solid var(--color-rule-strong)",
-                  borderRadius: 999,
-                  backgroundColor: auto ? "var(--color-shu)" : "transparent",
-                }}
-              >
-                <input
-                  type="checkbox"
-                  checked={auto}
-                  onChange={(e) => setAuto(e.target.checked)}
-                  className="absolute inset-0 opacity-0 cursor-pointer"
-                />
-                <span
-                  className="absolute top-0.5 w-2.5 h-2.5 bg-ground transition-transform"
-                  style={{
-                    borderRadius: 999,
-                    border: "1px solid var(--color-rule-strong)",
-                    left: auto ? "calc(100% - 0.625rem - 2px)" : "2px",
-                  }}
-                />
-              </span>
-              <span className="font-gothic text-[12px] text-ink">{t.autoLabel}</span>
-            </label>
-
-            <button
-              type="button"
-              onClick={() => setIndex((i) => (i + 1) % words.length)}
-              className="font-gothic text-[12px] uppercase tracking-[0.18em] text-ground bg-ink px-4 py-2 hover:bg-shu-deep dark:hover:bg-shu transition-colors"
-            >
-              {t.nextLabel}
-            </button>
-          </div>
+          {/* Stagger interval — the "間隔" between cells (delays.wave step) */}
+          <Field label={`${t.staggerLabel} — ${stagger}ms`}>
+            <input
+              type="range"
+              min={0}
+              max={160}
+              step={10}
+              value={stagger}
+              onChange={(e) => setStagger(Number(e.target.value))}
+              className="w-full accent-[var(--color-shu)] cursor-pointer"
+            />
+          </Field>
         </div>
       </section>
 
@@ -205,7 +232,7 @@ export function DemoPlayground({ lang }: { lang: Lang }) {
         <PanelHeading>{t.sectionPreview}</PanelHeading>
 
         <div
-          className="py-10 px-4 bg-ground-card flex justify-center"
+          className="py-10 px-4 bg-ground-card flex justify-center overflow-x-auto"
           style={{
             borderTop: "1px solid var(--color-rule)",
             borderBottom: "1px solid var(--color-rule)",
@@ -215,6 +242,7 @@ export function DemoPlayground({ lang }: { lang: Lang }) {
             cellOptions={{ preset: presets[preset] }}
             targets={targets}
             flipMode={flipMode}
+            delayFn={delayFn}
             className="ptpt-board"
             style={{ display: "flex", gap: "0.35rem" }}
           />
@@ -225,7 +253,7 @@ export function DemoPlayground({ lang }: { lang: Lang }) {
       <section>
         <PanelHeading>{t.sectionMarkup}</PanelHeading>
         <pre
-          className="bg-ink text-ground font-mono text-[12px] leading-[1.7] py-5 pr-5 pl-6 overflow-x-auto m-0 whitespace-pre-wrap break-all"
+          className="bg-ground-deep text-ink font-mono text-[12px] leading-[1.7] py-5 pr-5 pl-6 overflow-x-auto m-0 whitespace-pre-wrap break-all"
           style={{ borderLeft: "2px solid var(--color-shu)" }}
         >
           <code>{markup}</code>

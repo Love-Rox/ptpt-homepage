@@ -163,7 +163,7 @@ export function Prose({ children }: { children: string }) {
 // **bold**, and [text](url) links — no nesting, no recursion. Anything outside
 // these patterns is rendered as a span (with backslash escapes like \`, \*, \[
 // stripped so authors can write a literal `[` without it being parsed as a link).
-const INLINE_MD_RE = /(`[^`]+`|\*\*[^*]+\*\*|\[[^\]]+\]\([^)]+\))/g;
+const INLINE_MD_RE = /(`[^`]+`|\*\*[^*]+\*\*|\*[^*]+\*|\[[^\]]+\]\([^)]+\))/g;
 const LINK_RE = /^\[([^\]]+)\]\(([^)]+)\)$/;
 const ESCAPE_RE = /\\([`*[\]()\\])/g;
 
@@ -173,6 +173,7 @@ export function stripMd(text: string): string {
   return text
     .replace(/`([^`]+)`/g, "$1")
     .replace(/\*\*([^*]+)\*\*/g, "$1")
+    .replace(/\*([^*]+)\*/g, "$1")
     .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
     .replace(ESCAPE_RE, "$1");
 }
@@ -198,6 +199,13 @@ export function InlineMd({ text }: { text: string }) {
             <strong key={i} className="font-medium text-ink">
               {part.slice(2, -2)}
             </strong>
+          );
+        }
+        if (part.startsWith("*") && part.endsWith("*") && part.length >= 2) {
+          return (
+            <em key={i} className="not-italic text-shu-deep dark:text-shu">
+              {part.slice(1, -1)}
+            </em>
           );
         }
         const linkMatch = part.match(LINK_RE);

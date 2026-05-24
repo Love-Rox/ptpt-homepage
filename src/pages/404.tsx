@@ -5,8 +5,8 @@ export default function NotFound() {
     <ErrorPage
       lang="en"
       code="404"
-      title="Page not found"
-      message="The page you requested doesn't exist or has been moved."
+      title="Flight not found"
+      message="This destination isn't on the board — the page may have departed or never existed."
     />
   );
 }

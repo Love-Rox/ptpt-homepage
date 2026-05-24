@@ -59,9 +59,9 @@ export default async function DemoView({ locale }: { locale: Locale }) {
         />
       </div>
 
-      <div className="px-5 sm:px-6 lg:px-12 lg:pl-20 max-w-6xl mx-auto pb-20 sm:pb-24">
+      <div className="px-5 sm:px-6 lg:px-12 max-w-6xl mx-auto pb-20 sm:pb-24">
         <header className="mb-14 wa-fade-up" style={{ animationDelay: "120ms" }}>
-          <p className="font-gothic text-[11px] uppercase tracking-[0.3em] text-shu-deep dark:text-shu mb-5">
+          <p className="font-mono text-[11px] uppercase tracking-[0.3em] text-shu-deep dark:text-shu mb-5">
             {content.eyebrow}
           </p>
           <h1 className="font-mincho text-[2rem] sm:text-[2.75rem] lg:text-[3.5rem] leading-[1.15] text-ink mb-5 sm:mb-6 max-w-3xl">
@@ -70,7 +70,7 @@ export default async function DemoView({ locale }: { locale: Locale }) {
           <p className="font-gothic text-base text-ink-mute leading-[1.85] max-w-2xl">
             {content.description}
           </p>
-          <span aria-hidden="true" className="block h-px w-12 bg-shu mt-8" />
+          <span aria-hidden="true" className="board-seam block w-full mt-8" />
         </header>
 
         <DemoPlayground lang={locale} />

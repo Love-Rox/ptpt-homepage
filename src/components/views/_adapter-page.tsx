@@ -4,13 +4,13 @@ import { Meta } from "@/components/global/meta";
 import { Breadcrumbs, generateBreadcrumbItems } from "@/components/common/breadcrumbs";
 import { BreadcrumbSchema } from "@/components/seo/structured-data";
 import {
+  ADAPTERS,
   AdapterNav,
   type AdapterKey,
   Badge,
   Cta,
   InlineMd,
   InstallCommands,
-  NewBadge,
   npmUrl,
   githubPackageUrl,
   type OptionRow,
@@ -18,6 +18,7 @@ import {
   Prose,
   Section,
   SnippetBlock,
+  StatusPill,
   stripMd,
 } from "@/components/ptpt/shared";
 import { localePath, type Locale } from "@/lib/locale";
@@ -77,7 +78,7 @@ export default async function AdapterPage({
   const url = localePath(locale, ghFolder);
   const familyUrl = localePath(locale, "");
   const demoUrl = localePath(locale, "demo");
-  const isNew = Boolean(content.hero.isNew);
+  const status = ADAPTERS.find((a) => a.key === adapterKey)?.status ?? "ontime";
 
   return (
     <div className="relative">
@@ -108,16 +109,16 @@ export default async function AdapterPage({
         />
       </div>
 
-      <div className="px-5 sm:px-6 lg:px-12 lg:pl-20 max-w-6xl mx-auto pb-20 sm:pb-24">
+      <div className="px-5 sm:px-6 lg:px-12 max-w-6xl mx-auto pb-20 sm:pb-24">
         <AdapterNav current={adapterKey} locale={locale} />
 
         {/* —— hero ——————————————————————————————————————————————— */}
         <section className="mb-20 wa-fade-up" style={{ animationDelay: "120ms" }}>
           <div className="flex items-center gap-3 mb-4">
-            <p className="font-gothic text-[11px] uppercase tracking-[0.3em] text-shu-deep dark:text-shu">
+            <p className="font-mono text-[11px] uppercase tracking-[0.3em] text-shu-deep dark:text-shu">
               {content.hero.eyebrow}
             </p>
-            {isNew && <NewBadge />}
+            <StatusPill kind={status}>{status === "new" ? "new" : "on time"}</StatusPill>
           </div>
 
           <h1 className="font-mono font-medium text-[2.25rem] sm:text-[3rem] lg:text-[3.5rem] leading-[1.05] tracking-tight text-ink mb-6 break-all">
@@ -198,9 +199,9 @@ export default async function AdapterPage({
               <li key={i} className="flex gap-3">
                 <span
                   aria-hidden="true"
-                  className="font-mincho text-shu-deep dark:text-shu mt-0.5 select-none"
+                  className="text-shu-deep dark:text-shu mt-1 select-none text-[10px]"
                 >
-                  ・
+                  ▸
                 </span>
                 <span className="flex-1">
                   <InlineMd text={item} />

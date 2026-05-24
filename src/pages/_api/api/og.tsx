@@ -8,18 +8,18 @@ export const getConfig = async () => {
   return { render: "dynamic" };
 };
 
-// wa-modern OG card. Sumi ink on kinari paper, with shu vermilion as the
-// single warm accent. Mincho carries the title; Mono carries metadata. Echoes
-// the site identity (right-edge spine stripe, hairline rules, 落款 seal).
+// Departure-board OG card. Bone glyphs on a near-black housing, lit by a single
+// amber signal. Mincho carries the title; Mono carries the board chrome. Echoes
+// the site identity (amber signal edge, hairline rules, split-flap seal).
 
 const PALETTE = {
-  ground: "#f4ede2",
-  groundDeep: "#ebe2d2",
-  ink: "#1a1815",
-  inkMute: "#6b6358",
-  inkSoft: "#aaa093",
-  shu: "#c8442f",
-  shuDeep: "#a83626",
+  ground: "#0d0e11",
+  groundDeep: "#07080a",
+  ink: "#f0e8d0",
+  inkMute: "#9b958a",
+  inkSoft: "#6a655c",
+  shu: "#f2b134",
+  shuDeep: "#e09a23",
 };
 
 let minchoFont: ArrayBuffer | null = null;
@@ -51,9 +51,9 @@ export default async function OGImage(input: unknown) {
         display: "flex",
         position: "relative",
         backgroundColor: PALETTE.ground,
-        // Subtle paper grain
+        // Faint flap-board grain
         backgroundImage:
-          "radial-gradient(circle at 1px 1px, rgba(26, 24, 21, 0.06) 1px, transparent 0)",
+          "radial-gradient(circle at 1px 1px, rgba(240, 232, 208, 0.05) 1px, transparent 0)",
         backgroundSize: "6px 6px",
         fontFamily: '"Shippori Mincho B1", "JetBrains Mono"',
         color: PALETTE.ink,
@@ -81,7 +81,7 @@ export default async function OGImage(input: unknown) {
           right: 60,
           height: 1,
           display: "flex",
-          backgroundColor: "rgba(26,24,21,0.16)",
+          backgroundColor: "rgba(240,232,208,0.16)",
         }}
       />
 
@@ -94,7 +94,7 @@ export default async function OGImage(input: unknown) {
           right: 60,
           height: 1,
           display: "flex",
-          backgroundColor: "rgba(26,24,21,0.16)",
+          backgroundColor: "rgba(240,232,208,0.16)",
         }}
       />
 
@@ -263,26 +263,42 @@ export default async function OGImage(input: unknown) {
           </div>
         </div>
 
-        {/* patapata seal — small shu square with two Kana vertically */}
+        {/* patapata seal — a single split-flap cell showing "P", split by its
+            flap seam, echoing the favicon and the live board. */}
         <div
           style={{
+            position: "relative",
             display: "flex",
-            flexDirection: "column",
             alignItems: "center",
             justifyContent: "center",
             width: 56,
             height: 56,
-            backgroundColor: PALETTE.shuDeep,
-            color: PALETTE.ground,
-            fontFamily: '"Shippori Mincho B1"',
-            fontWeight: 700,
-            fontSize: 16,
-            lineHeight: 1.05,
-            letterSpacing: "0.02em",
+            backgroundColor: "#1a1d23",
+            border: `1.5px solid ${PALETTE.shu}`,
           }}
         >
-          <span style={{ display: "flex" }}>ぱ</span>
-          <span style={{ display: "flex" }}>た</span>
+          <span
+            style={{
+              display: "flex",
+              fontFamily: '"JetBrains Mono"',
+              fontWeight: 500,
+              fontSize: 30,
+              color: PALETTE.ink,
+            }}
+          >
+            P
+          </span>
+          <div
+            style={{
+              position: "absolute",
+              left: 0,
+              right: 0,
+              top: 27,
+              height: 1.5,
+              display: "flex",
+              backgroundColor: "#0d0e11",
+            }}
+          />
         </div>
       </div>
     </div>,

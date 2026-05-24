@@ -1,5 +1,6 @@
 import { localePath, type Locale } from "@/lib/locale";
-import { SealMark } from "@/components/ptpt/shared";
+import { Roundel } from "@/components/ptpt/shared";
+import { StationClock } from "@/components/ptpt/station-clock";
 import footerEn from "@private/lang/components/global/en/footer.json";
 import footerJa from "@private/lang/components/global/ja/footer.json";
 
@@ -11,15 +12,33 @@ export const Footer = ({ lang = "en" }: { lang?: Locale }) => {
 
   return (
     <footer className="relative mt-32">
-      {/* shu top rule — punctuates the page like a colophon line */}
+      {/* shu top rule — the board's bottom edge */}
       <span aria-hidden="true" className="block h-px w-full bg-shu" />
+
+      {/* terminal legend strip */}
+      <div
+        aria-hidden="true"
+        className="board-head flex items-center justify-between gap-4 px-5 sm:px-6 lg:px-12 h-8"
+      >
+        <span>ptpt terminal · last call</span>
+        <span className="flex items-center gap-2">
+          <StationClock />
+        </span>
+      </div>
 
       <div className="px-5 sm:px-6 lg:px-12 py-12 sm:py-16">
         <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-10">
           {/* Wordmark + tagline (5 cols) */}
           <div className="md:col-span-5">
-            <p className="font-mincho text-3xl text-ink leading-none mb-3">パタパタ</p>
-            <p className="font-mono text-[11px] text-ink-mute tracking-[0.18em] mb-5">patapata</p>
+            <div className="flex items-center gap-3 mb-4">
+              <Roundel size={44} />
+              <span>
+                <p className="font-display text-3xl text-ink leading-none uppercase tracking-wide">
+                  パタパタ
+                </p>
+                <p className="font-mono text-[11px] text-ink-mute tracking-[0.18em] mt-1">patapata</p>
+              </span>
+            </div>
             <p className="font-gothic text-sm text-ink-mute leading-relaxed max-w-md">
               {content.tagline}
             </p>
@@ -87,9 +106,12 @@ export const Footer = ({ lang = "en" }: { lang?: Locale }) => {
             </ul>
           </div>
 
-          {/* Seal — 1 cols on the lower-right margin */}
+          {/* Service status — lower-right margin */}
           <div className="md:col-span-1 flex md:justify-end items-end">
-            <SealMark label="ぱた" size={48} />
+            <span className="pill pill-ontime">
+              <span aria-hidden="true" className="pill-lamp" />
+              live
+            </span>
           </div>
         </div>
 

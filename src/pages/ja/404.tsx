@@ -5,8 +5,8 @@ export default function NotFound() {
     <ErrorPage
       lang="ja"
       code="404"
-      title="ページが見つかりません"
-      message="お探しのページは存在しないか、移動した可能性があります。"
+      title="この便は見つかりません"
+      message="お探しの行き先は案内板にありません。ページは出発済みか、元々存在しない可能性があります。"
     />
   );
 }

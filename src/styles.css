@@ -383,3 +383,180 @@ h3 {
     animation: none;
   }
 }
+
+/* ——————————————————————————————————————————————————————————————
+   DEPARTURE BOARD COMPONENTS
+   The whole site is an airport terminal. These classes build the
+   Solari board: a near-black housing lit by raked amber light, with
+   physical flap seams between rows and signal-coloured status lamps.
+   —————————————————————————————————————————————————————————————— */
+
+/* —— the board housing: a dark Solari panel lit from the top —— */
+.board {
+  position: relative;
+  background:
+    linear-gradient(180deg, rgba(242, 177, 52, 0.07), transparent 16%),
+    var(--color-ground-deep);
+  border: 1px solid var(--color-rule);
+  box-shadow:
+    inset 0 1px 0 rgba(240, 232, 208, 0.06),
+    inset 0 -40px 60px -40px rgba(0, 0, 0, 0.9),
+    0 30px 60px -30px rgba(0, 0, 0, 0.85);
+}
+/* fine flap scanlines raked across the housing */
+.board::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.28) 0,
+    rgba(0, 0, 0, 0.28) 1px,
+    transparent 1px,
+    transparent 4px
+  );
+  opacity: 0.4;
+}
+.board > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* —— the legend / column-header strip of a board —— */
+.board-head {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--color-ink-soft);
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.45), transparent);
+  border-bottom: 1px solid var(--color-rule);
+}
+
+/* —— a departures row: a flap with a hairline top seam + highlight —— */
+.flap-row {
+  position: relative;
+  border-top: 1px solid rgba(0, 0, 0, 0.7);
+  box-shadow: inset 0 1px 0 rgba(240, 232, 208, 0.05);
+  transition: background-color 0.25s var(--ease-paper);
+}
+.flap-row:hover {
+  background: color-mix(in srgb, var(--color-shu) 7%, transparent);
+}
+
+/* —— a faux split-flap glyph chip (for wordmarks / gate codes) —— */
+.flap-chip {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0.92em;
+  padding: 0.14em 0.16em 0.18em;
+  background: #1a1d23;
+  color: var(--color-ink);
+  font-family: var(--font-mono);
+  font-weight: 700;
+  line-height: 1;
+  border-radius: 2px;
+  box-shadow:
+    inset 0 0 0 1px rgba(0, 0, 0, 0.7),
+    0 1px 0 rgba(240, 232, 208, 0.06),
+    0 2px 4px rgba(0, 0, 0, 0.5);
+}
+/* the seam across the middle where the two flaps meet */
+.flap-chip::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 1px;
+  background: rgba(0, 0, 0, 0.78);
+  box-shadow: 0 1px 0 rgba(240, 232, 208, 0.06);
+}
+
+/* —— status lamps / pills — colour drives border, text and lamp —— */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45em;
+  padding: 0.22em 0.6em;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  line-height: 1.3;
+  border: 1px solid color-mix(in srgb, currentColor 45%, transparent);
+  border-radius: 1px;
+  white-space: nowrap;
+}
+.pill-lamp {
+  width: 0.5em;
+  height: 0.5em;
+  border-radius: 9999px;
+  background: currentColor;
+  box-shadow: 0 0 7px currentColor;
+  flex: none;
+}
+.pill-ontime {
+  color: var(--color-go);
+}
+.pill-boarding {
+  color: var(--color-shu);
+}
+.pill-delayed {
+  color: var(--color-stop);
+}
+.pill-new {
+  color: var(--color-shu);
+}
+
+/* the boarding lamp blinks like a real "now boarding" signal */
+@keyframes lamp-blink {
+  0%,
+  60% {
+    opacity: 1;
+  }
+  80%,
+  100% {
+    opacity: 0.25;
+  }
+}
+.pill-boarding .pill-lamp {
+  animation: lamp-blink 1.2s steps(1, end) infinite;
+}
+
+/* —— boarding-pass / ticket panel —— */
+.ticket {
+  position: relative;
+  background: var(--color-ground-card);
+  border: 1px solid var(--color-rule);
+}
+.ticket-perf {
+  border-top: 1px dashed var(--color-rule-strong);
+}
+
+/* —— a "departures" power-on cascade: rows clack in from the top —— */
+@keyframes flap-in {
+  0% {
+    opacity: 0;
+    transform: translateY(-0.35rem) rotateX(28deg);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) rotateX(0);
+  }
+}
+.flap-in {
+  transform-origin: top;
+  animation: flap-in 0.5s var(--ease-paper) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pill-boarding .pill-lamp,
+  .flap-in {
+    animation: none;
+  }
+}

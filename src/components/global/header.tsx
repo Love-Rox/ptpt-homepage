@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { ClientRouterHelper } from "@/helper/ClientRouterHelper";
 import { DarkModeToggle } from "@/components/common/dark-mode-toggle";
+import { StationClock } from "@/components/ptpt/station-clock";
 import { localePath, type Locale } from "@/lib/locale";
 
 interface NavItem {
@@ -15,25 +16,63 @@ interface HeaderProps {
   navItems?: NavItem[];
 }
 
+/** Small split-flap roundel used as the terminal mark. */
+function HeaderRoundel() {
+  return (
+    <svg width="26" height="26" viewBox="0 0 64 64" aria-hidden="true" className="select-none flex-none">
+      <circle cx="32" cy="32" r="30" fill="var(--color-ground-deep)" stroke="var(--color-shu)" strokeWidth="2" />
+      <rect x="22" y="19" width="20" height="26" rx="2.5" fill="var(--color-ink)" />
+      <text
+        x="32"
+        y="39"
+        textAnchor="middle"
+        fontFamily="var(--font-mono)"
+        fontWeight="700"
+        fontSize="21"
+        fill="var(--color-ground-deep)"
+      >
+        P
+      </text>
+      <rect x="22" y="31.2" width="20" height="1.6" fill="var(--color-ground-deep)" />
+    </svg>
+  );
+}
+
 export const Header = ({ lang, navItems = [] }: HeaderProps) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const homeHref = localePath(lang, "");
 
   return (
     <header className="relative z-40">
-      {/* hairline ruled top edge — anchors the header to the page like a book gutter */}
-      <span aria-hidden="true" className="absolute inset-x-0 top-0 h-px bg-rule" />
+      {/* terminal status strip — amber hairline with a live "departures" legend */}
+      <div
+        aria-hidden="true"
+        className="flex items-center justify-between gap-4 px-5 sm:px-6 lg:px-12 h-6 border-b border-rule bg-ground-deep/60"
+      >
+        <span className="font-mono text-[9px] sm:text-[10px] uppercase tracking-[0.3em] text-ink-soft">
+          ptpt terminal · departures
+        </span>
+        <span className="hidden sm:flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.2em] text-ink-soft">
+          <StationClock />
+          <span className="pill pill-ontime !border-0 !px-0">
+            <span className="pill-lamp" />
+            live
+          </span>
+        </span>
+      </div>
+      <span aria-hidden="true" className="absolute inset-x-0 top-0 h-px bg-shu/60" />
 
       <nav
         aria-label="Global"
         className="flex items-center justify-between gap-4 sm:gap-6 px-5 sm:px-6 lg:px-12 py-4 sm:py-5"
       >
-        {/* Wordmark — Mincho display + small shu rule + reading hint */}
+        {/* Wordmark — split-flap roundel + signage display + reading hint */}
         <a
           href={homeHref}
-          className="group flex items-baseline gap-3 -ml-1 px-1 transition-opacity hover:opacity-80"
+          className="group flex items-center gap-2.5 -ml-1 px-1 transition-opacity hover:opacity-80"
         >
-          <span className="font-mincho text-xl text-ink leading-none">パタパタ</span>
+          <HeaderRoundel />
+          <span className="font-display text-xl text-ink leading-none tracking-wide uppercase">パタパタ</span>
           <span aria-hidden="true" className="hidden xs:block w-px h-4 bg-shu" />
           <span className="hidden xs:inline font-mono text-[11px] text-ink-mute tracking-[0.18em]">
             patapata
@@ -100,8 +139,13 @@ export const Header = ({ lang, navItems = [] }: HeaderProps) => {
             aria-hidden="true"
           />
           <div className="relative ml-auto h-full w-full max-w-sm bg-ground border-l border-rule px-6 py-6 overflow-y-auto">
-            <div className="flex items-baseline justify-between mb-10">
-              <span className="font-mincho text-2xl text-ink leading-none">パタパタ</span>
+            <div className="flex items-center justify-between mb-10">
+              <span className="flex items-center gap-2.5">
+                <HeaderRoundel />
+                <span className="font-display text-2xl text-ink leading-none tracking-wide uppercase">
+                  パタパタ
+                </span>
+              </span>
               <button
                 type="button"
                 onClick={() => setMobileMenuOpen(false)}

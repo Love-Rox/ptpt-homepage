@@ -47,10 +47,9 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
       </head>
       <body className="bg-ground text-ink antialiased">
         <div className="relative min-h-screen flex flex-col">
-          {/* spine stripe — a thin shu rule pinned to the right edge with the
-              package family written vertically inside it. Like the spine of a
-              book sitting on the page. Hidden on small screens to avoid
-              overlapping body content. */}
+          {/* terminal edge — an amber signal rail pinned to the right edge,
+              like the lit trim down the side of a departures board. Hidden on
+              small screens to avoid overlapping body content. */}
           <div
             aria-hidden="true"
             className="hidden md:flex fixed top-0 bottom-0 right-0 z-30 w-6 bg-shu items-end justify-center pb-6 pointer-events-none"
@@ -59,7 +58,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
               className="font-mono text-[10px] text-ground tracking-[0.3em] uppercase select-none"
               style={{ writingMode: "vertical-rl" }}
             >
-              @love-rox / ptpt
+              departures · @love-rox/ptpt
             </span>
           </div>
 

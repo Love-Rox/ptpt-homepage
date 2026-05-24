@@ -7,12 +7,13 @@ import {
   ADAPTERS,
   Badge,
   Cta,
+  FlapWord,
   InlineMd,
-  NewBadge,
   Prose,
   RECOMMENDED_CSS,
   Section,
   SnippetBlock,
+  StatusPill,
   stripMd,
 } from "@/components/ptpt/shared";
 import { localePath, type Locale } from "@/lib/locale";
@@ -26,18 +27,30 @@ const NPM_URL = "https://www.npmjs.com/package/@love-rox/ptpt-core";
 const GITHUB_URL = "https://github.com/Love-Rox/ptpt";
 const HERO_SAMPLE = "PATAPATA";
 
+type FamilyItem = {
+  name: string;
+  role: string;
+  description: string;
+  tagline?: string;
+  isNew?: boolean;
+};
+
 export default async function LandingView({ locale }: { locale: Locale }) {
   const content = data[locale];
   const url = localePath(locale, "");
   const demoUrl = localePath(locale, "demo");
 
-  const items = content.family.items;
-  const coreItem = items.core;
-  const adapterItems = [items.react, items.vue, items.rehype, items.astro];
-  const adapterMap = ADAPTERS.reduce<Record<string, (typeof ADAPTERS)[number]>>(
-    (acc, a) => ({ ...acc, [a.key]: a }),
-    {},
-  );
+  // The package family, arranged as a departures board: each package is a
+  // "service" with a gate, a destination (its name), a route (its role) and a
+  // status lamp.
+  const items = content.family.items as Record<string, FamilyItem>;
+  const departures = ADAPTERS.map((a, i) => ({
+    meta: a,
+    item: items[a.key],
+    gate: `A${i + 1}`,
+    ver: VERSIONS[a.key],
+    status: a.status,
+  }));
 
   return (
     <div className="relative">
@@ -48,32 +61,26 @@ export default async function LandingView({ locale }: { locale: Locale }) {
         url={url}
         lang={locale}
       />
-      {/* No BreadcrumbList on the landing — Schema.org expects ≥2 items, and
-          a "Home" by itself doesn't add value for the root URL. */}
 
       {/* —— HERO ——————————————————————————————————————————————————————
-          The live split-flap board is the protagonist: it gets the larger
-          column (7/12 on lg+) and a faint giant 「ぱ」 watermark behind it.
-          The metadata + CTAs sit on the left in a narrower column. The
-          reader is met by a flipping board first. */}
-      <section className="relative px-5 sm:px-6 lg:px-12 pt-10 pb-16 sm:pt-12 sm:pb-24 lg:pt-20 lg:pb-32 overflow-hidden">
-        <div className="max-w-6xl mx-auto grid grid-cols-12 gap-x-6 lg:gap-x-16 items-start">
-          {/* Left column: eyebrow + heading + tagline + badges + CTAs (narrower) */}
+          The live split-flap board is the protagonist, framed inside a real
+          departures-board housing. The metadata + CTAs sit on the left. */}
+      <section className="relative px-5 sm:px-6 lg:px-12 pt-8 pb-16 sm:pt-12 sm:pb-24 lg:pt-16 lg:pb-32 overflow-hidden">
+        <div className="max-w-6xl mx-auto grid grid-cols-12 gap-x-6 lg:gap-x-16 items-center">
+          {/* Left column: eyebrow + wordmark + tagline + badges + CTAs */}
           <div className="col-span-12 lg:col-span-5 wa-fade-up" style={{ animationDelay: "120ms" }}>
-            <p className="font-gothic text-[11px] uppercase tracking-[0.3em] text-shu-deep dark:text-shu mb-6">
+            <p className="font-mono text-[11px] uppercase tracking-[0.3em] text-shu-deep dark:text-shu mb-6">
               {content.hero.eyebrow}
             </p>
-            {/* Wordmark — パタパタ in Mincho display, the second half tinted
-                shu. aria-label feeds screen readers the canonical romaji. */}
+            {/* Wordmark — signage caps; second half lit amber. aria-label feeds
+                screen readers the canonical romaji. */}
             <h1
-              className="font-mincho text-[3rem] xs:text-[3.5rem] sm:text-[4.75rem] lg:text-[5.5rem] leading-none tracking-tight text-ink mb-3"
+              className="font-display uppercase text-[3rem] xs:text-[3.5rem] sm:text-[4.75rem] lg:text-[5.25rem] leading-none tracking-tight text-ink mb-4"
               aria-label="patapata"
             >
               パタ<span className="text-shu-deep dark:text-shu">パタ</span>
             </h1>
-            <p className="font-mono text-[12px] text-ink-soft tracking-[0.18em] mb-8">
-              patapata · ptpt
-            </p>
+            <FlapWord text="PATAPATA" className="mb-8 text-[12px]" ariaLabel="patapata" />
 
             <p className="font-gothic text-base text-ink leading-[1.85] max-w-md mb-8">
               <InlineMd text={content.hero.tagline} />
@@ -108,160 +115,99 @@ export default async function LandingView({ locale }: { locale: Locale }) {
             </div>
           </div>
 
-          {/* Right column: live vertical sample, now the wider column. */}
+          {/* Right column: the live board inside a Solari housing. */}
           <div
             className="col-span-12 lg:col-span-7 wa-fade-up mt-12 lg:mt-0"
             style={{ animationDelay: "320ms" }}
           >
-            <figure
-              className="relative px-5 sm:px-8 lg:px-12 py-2 overflow-hidden"
-              style={{
-                borderLeft: "1px solid var(--color-rule)",
-                borderRight: "1px solid var(--color-rule)",
-              }}
-            >
-              {/* shu chapter accent on the left rule */}
-              <span
-                aria-hidden="true"
-                className="absolute -left-px top-0 w-px h-16 sm:h-20 bg-shu wa-rule-draw"
-              />
+            <figure className="board flap-in overflow-hidden">
+              {/* legend strip */}
+              <div className="board-head flex items-center justify-between gap-4 px-4 sm:px-5 h-9">
+                <span>now departing</span>
+                <span className="flex items-center gap-3">
+                  <span className="hidden sm:inline">gate a1</span>
+                  <span className="pill pill-boarding" style={{ border: 0, padding: 0 }}>
+                    <span aria-hidden="true" className="pill-lamp" />
+                    boarding
+                  </span>
+                </span>
+              </div>
 
-              {/* Atmospheric watermark — giant ぱ in shu-wash. Clamps with
-                  viewport so it doesn't blow past mobile screens. */}
-              <span
-                aria-hidden="true"
-                className="absolute -top-6 sm:-top-12 -right-4 sm:-right-8 font-mincho text-shu-wash select-none pointer-events-none leading-none"
-                style={{ fontSize: "clamp(13rem, 55vw, 26rem)", opacity: 0.55 }}
-              >
-                ぱ
-              </span>
-
-              {/* Tiny caption in the right gutter. Hidden on the smallest
-                  screens where it competes for space with the watermark. */}
-              <span
-                aria-hidden="true"
-                className="hidden sm:block absolute right-2 top-2 font-gothic text-[10px] uppercase tracking-[0.4em] text-ink-soft select-none"
-                style={{ writingMode: "vertical-rl" }}
-              >
-                live · split-flap
-              </span>
-
-              {/* Live split-flap board — flips between destinations like a real
-                  departure display. The protagonist of the hero. */}
-              <div className="relative flex items-center justify-center min-h-[clamp(14rem,40vw,20rem)]">
+              {/* the live split-flap board */}
+              <div className="relative flex items-center justify-center px-3 sm:px-6 py-10 sm:py-12 min-h-[clamp(11rem,32vw,17rem)]">
                 <PatapataBoard
                   cellOptions={{ preset: presets.alphanumeric }}
                   targets={HERO_SAMPLE}
                   flipMode="replace"
                   className="ptpt-board"
-                  style={{ display: "flex", gap: "0.4rem" }}
+                  style={{ display: "flex", gap: "0.35rem" }}
                 />
               </div>
-            </figure>
 
-            {/* Caption strip below the figure: the <PatapataBoard> markup in
-                mono with a small shu seal on the left marking it as the page's
-                signature. */}
-            <figcaption className="mt-6 flex items-baseline gap-3 px-5 sm:px-8 lg:px-12">
-              <span
-                aria-hidden="true"
-                className="block w-4 h-px bg-shu translate-y-[-3px] flex-shrink-0"
-              />
-              <p className="font-mono text-[10px] sm:text-[11px] text-ink-mute break-all flex-1">
-                {`<PatapataBoard targets="${HERO_SAMPLE}" />`}
-              </p>
-            </figcaption>
+              {/* markup caption */}
+              <figcaption className="flex items-center gap-3 px-4 sm:px-5 h-10 border-t border-rule">
+                <span aria-hidden="true" className="block w-3 h-px bg-shu flex-shrink-0" />
+                <p className="font-mono text-[10px] sm:text-[11px] text-ink-mute break-all">
+                  {`<PatapataBoard targets="${HERO_SAMPLE}" />`}
+                </p>
+              </figcaption>
+            </figure>
           </div>
         </div>
       </section>
 
-      {/* No breadcrumbs on the landing — the page IS home; rendering a
-          "Home / patapata" trail just doubles up the title. */}
-
-      <div className="px-5 sm:px-6 lg:px-12 lg:pl-20 max-w-6xl mx-auto pb-20 sm:pb-24">
+      <div className="px-5 sm:px-6 lg:px-12 max-w-6xl mx-auto pb-20 sm:pb-24">
         {/* —— Problem ——————————————————————————————————————————————— */}
         <Section n={1} eyebrow="Why" heading={content.problem.heading}>
           <Prose>{content.problem.body}</Prose>
         </Section>
 
-        {/* —— Family ——————————————————————————————————————————————— */}
-        <Section n={2} eyebrow="Packages" heading={content.family.heading}>
+        {/* —— Family: the departures board ———————————————————————————— */}
+        <Section n={2} eyebrow="Departures" heading={content.family.heading}>
           <Prose>{content.family.description}</Prose>
 
-          <div className="mt-10">
-            <p className="font-gothic text-[10px] uppercase tracking-[0.3em] text-ink-soft mb-4">
-              {content.family.coreLabel}
-            </p>
-            <Link
-              to={adapterMap.core.href(locale) as `/${string}`}
-              className="group block py-6 transition-colors"
-              style={{
-                borderTop: "1px solid var(--color-rule)",
-                borderBottom: "1px solid var(--color-rule)",
-              }}
-            >
-              <div className="grid grid-cols-12 gap-4 items-baseline">
-                <div className="col-span-12 sm:col-span-4">
-                  <p className="font-mono text-base text-ink group-hover:text-shu-deep dark:group-hover:text-shu transition-colors break-all">
-                    {coreItem.name}
-                  </p>
-                  <p className="font-mono text-[11px] text-ink-soft tracking-wider mt-1">
-                    v{VERSIONS.core}
-                  </p>
-                </div>
-                <div className="col-span-12 sm:col-span-8">
-                  <p className="font-mincho text-lg text-ink leading-snug mb-1.5">
-                    {coreItem.role}
-                  </p>
-                  <p className="text-sm text-ink-mute leading-relaxed">
-                    <InlineMd text={coreItem.description} />
-                  </p>
-                </div>
-              </div>
-            </Link>
-          </div>
+          <div className="board mt-8">
+            {/* column legend */}
+            <div className="board-head grid grid-cols-12 gap-3 items-center px-4 sm:px-5 h-9">
+              <span className="col-span-5 sm:col-span-3">dest</span>
+              <span className="hidden sm:block sm:col-span-5">via</span>
+              <span className="col-span-3 sm:col-span-1">gate</span>
+              <span className="col-span-4 sm:col-span-3 text-right">status</span>
+            </div>
 
-          <div className="mt-10">
-            <p className="font-gothic text-[10px] uppercase tracking-[0.3em] text-ink-soft mb-4">
-              {content.family.adaptersLabel}
-            </p>
-            <ul className="grid sm:grid-cols-2 gap-x-8">
-              {adapterItems.map((pkg, i) => {
-                const meta = adapterMap[asAdapterKey(pkg.name)];
-                return (
-                  <li
-                    key={pkg.name}
-                    className={i < 2 ? "" : "sm:pt-0"}
-                    style={{
-                      borderTop: "1px solid var(--color-rule)",
-                    }}
-                  >
-                    <Link to={meta.href(locale) as `/${string}`} className="group block py-5">
-                      <div className="flex items-baseline gap-2 mb-1.5 flex-wrap">
-                        <p className="font-mono text-sm text-ink group-hover:text-shu-deep dark:group-hover:text-shu transition-colors break-all">
-                          {pkg.name}
-                        </p>
-                        {pkg.isNew && <NewBadge />}
-                      </div>
-                      <p className="font-mincho text-base text-ink leading-snug mb-1">{pkg.role}</p>
-                      <p className="text-sm text-ink-mute leading-relaxed">
-                        <InlineMd text={pkg.description} />
-                      </p>
-                      <div className="flex items-center justify-between mt-3 text-xs">
-                        {pkg.tagline ? (
-                          <span className="font-mincho text-ink-soft italic">{pkg.tagline}</span>
-                        ) : (
-                          <span />
-                        )}
-                        <span className="font-gothic text-ink-mute group-hover:text-shu-deep dark:group-hover:text-shu transition-colors uppercase tracking-[0.18em]">
-                          {content.family.viewLabel} →
-                        </span>
-                      </div>
-                    </Link>
-                  </li>
-                );
-              })}
-            </ul>
+            {departures.map((row, i) => (
+              <Link
+                key={row.meta.key}
+                to={row.meta.href(locale) as `/${string}`}
+                className="flap-row flap-in group grid grid-cols-12 gap-3 items-center px-4 sm:px-5 py-4"
+                style={{ animationDelay: `${i * 70}ms` }}
+              >
+                <div className="col-span-5 sm:col-span-3 min-w-0">
+                  <p className="font-display uppercase tracking-wide text-base sm:text-lg leading-none text-ink group-hover:text-shu-deep dark:group-hover:text-shu transition-colors">
+                    {row.meta.short}
+                  </p>
+                  <p className="font-mono text-[10px] text-ink-soft mt-1 truncate">
+                    {row.item.name} · v{row.ver}
+                  </p>
+                </div>
+                <div className="hidden sm:block sm:col-span-5 min-w-0">
+                  <p className="font-mincho text-sm text-ink leading-snug">{row.item.role}</p>
+                  <p className="text-xs text-ink-mute leading-relaxed truncate">
+                    <InlineMd text={row.item.description} />
+                  </p>
+                </div>
+                <div className="col-span-3 sm:col-span-1">
+                  <span className="flap-chip text-shu-deep dark:text-shu" style={{ fontSize: "13px" }}>
+                    {row.gate}
+                  </span>
+                </div>
+                <div className="col-span-4 sm:col-span-3 flex justify-end">
+                  <StatusPill kind={row.status}>
+                    {row.status === "new" ? "new" : "on time"}
+                  </StatusPill>
+                </div>
+              </Link>
+            ))}
           </div>
         </Section>
 
@@ -278,9 +224,9 @@ export default async function LandingView({ locale }: { locale: Locale }) {
               <li key={i} className="flex gap-3">
                 <span
                   aria-hidden="true"
-                  className="font-mincho text-shu-deep dark:text-shu mt-0.5 select-none"
+                  className="text-shu-deep dark:text-shu mt-1 select-none text-[10px]"
                 >
-                  ・
+                  ▸
                 </span>
                 <span className="flex-1">
                   <InlineMd text={item} />
@@ -305,10 +251,13 @@ export default async function LandingView({ locale }: { locale: Locale }) {
           <Prose>{content.license.body}</Prose>
         </Section>
 
-        {/* —— CTA strip ——————————————————————————————————————— */}
-        <section className="mt-16 pt-12" style={{ borderTop: "1px solid var(--color-rule)" }}>
+        {/* —— CTA strip — a boarding call ——————————————————————— */}
+        <section className="board mt-16 px-6 sm:px-8 py-8 sm:py-10">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
             <div>
+              <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-shu-deep dark:text-shu mb-3">
+                final call · boarding
+              </p>
               <h2 className="font-mincho text-2xl text-ink leading-snug mb-1">
                 {content.cta.heading}
               </h2>
@@ -324,11 +273,4 @@ export default async function LandingView({ locale }: { locale: Locale }) {
       </div>
     </div>
   );
-}
-
-function asAdapterKey(name: string): "react" | "vue" | "rehype" | "astro" {
-  if (name.endsWith("-react")) return "react";
-  if (name.endsWith("-vue")) return "vue";
-  if (name.endsWith("-rehype")) return "rehype";
-  return "astro";
 }

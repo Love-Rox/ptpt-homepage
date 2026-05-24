@@ -8,12 +8,21 @@ export type { Locale };
 
 export type AdapterKey = "core" | "react" | "vue" | "rehype" | "astro";
 
+/**
+ * Per-package release status, shown as the board's status lamp:
+ *   - "new"    — shipped or updated in the current release
+ *   - "ontime" — unchanged from the existing release
+ * Everything is "new" for the first release; flip a package to "ontime" once a
+ * later release leaves it untouched.
+ */
+export type ReleaseStatus = "new" | "ontime";
+
 export interface AdapterMeta {
   key: AdapterKey;
   name: string;
   short: string;
   href: (locale: Locale) => string;
-  isNew?: boolean;
+  status: ReleaseStatus;
 }
 
 export const ADAPTERS: AdapterMeta[] = [
@@ -22,79 +31,117 @@ export const ADAPTERS: AdapterMeta[] = [
     name: "@love-rox/ptpt-core",
     short: "core",
     href: (l) => localePath(l, ""),
+    status: "new",
   },
   {
     key: "react",
     name: "@love-rox/ptpt-react",
     short: "react",
     href: (l) => localePath(l, "react"),
+    status: "new",
   },
   {
     key: "vue",
     name: "@love-rox/ptpt-vue",
     short: "vue",
     href: (l) => localePath(l, "vue"),
+    status: "new",
   },
   {
     key: "rehype",
     name: "@love-rox/ptpt-rehype",
     short: "rehype",
     href: (l) => localePath(l, "rehype"),
+    status: "new",
   },
   {
     key: "astro",
     name: "@love-rox/ptpt-astro",
     short: "astro",
     href: (l) => localePath(l, "astro"),
-    isNew: true,
+    status: "new",
   },
 ];
 
-// —— wa-modern primitives ——————————————————————————————————————————
+// —— departure-board primitives ————————————————————————————————————
 
-const KANJI_NUMS = ["一", "二", "三", "四", "五", "六", "七", "八", "九", "十"];
-
-/** Vertical Kanji chapter number for section margins. Index is 1-based. */
-export function ChapterNumber({ n }: { n: number }) {
-  const k = KANJI_NUMS[n - 1] ?? String(n);
+/** A faux split-flap word: each character on its own Solari flap chip. Used
+ *  for wordmarks and short accents where the live JS board would be overkill. */
+export function FlapWord({
+  text,
+  className = "",
+  ariaLabel,
+}: {
+  text: string;
+  className?: string;
+  ariaLabel?: string;
+}) {
   return (
     <span
-      aria-hidden="true"
-      className="font-mincho text-shu-deep dark:text-shu select-none"
-      style={{
-        writingMode: "vertical-rl",
-        fontSize: "0.875rem",
-        letterSpacing: "0.4em",
-        lineHeight: 1,
-      }}
+      className={`inline-flex gap-[2px] ${className}`}
+      {...(ariaLabel ? { role: "img", "aria-label": ariaLabel } : {})}
     >
-      第{k}
+      {[...text].map((ch, i) => (
+        <span key={i} aria-hidden="true" className="flap-chip">
+          {ch === " " ? " " : ch}
+        </span>
+      ))}
     </span>
   );
 }
 
-/** A small red square 落款印 (seal). Used in footer + accent moments. */
-export function SealMark({ label = "ぱた", size = 56 }: { label?: string; size?: number }) {
+/** A gate / departure code used as a section index. Replaces the old vertical
+ *  kanji chapter number — now a "GATE 0n" legend with the number on a flap. */
+export function GateTag({ n, label = "GATE" }: { n: number; label?: string }) {
+  const code = String(n).padStart(2, "0");
   return (
-    <span
-      role="img"
-      aria-label={label}
-      className="inline-flex items-center justify-center font-mincho text-ground bg-shu-deep select-none"
-      style={{
-        width: size,
-        height: size,
-        fontSize: size * 0.28,
-        lineHeight: 1,
-        letterSpacing: "0.05em",
-        writingMode: "vertical-rl",
-        padding: size * 0.08,
-        borderRadius: 2,
-        boxShadow: "inset 0 0 0 2px rgba(244,237,226,0.2)",
-        fontWeight: 700,
-      }}
-    >
-      {label}
+    <span className="inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.2em] text-ink-soft select-none">
+      <span>{label}</span>
+      <span className="flap-chip text-shu-deep dark:text-shu" style={{ fontSize: "12px" }}>
+        {code}
+      </span>
     </span>
+  );
+}
+
+/** Status lamp + label, signal-coloured: the board's on-time / boarding /
+ *  delayed / new indicator. */
+export function StatusPill({
+  kind = "ontime",
+  children,
+}: {
+  kind?: "ontime" | "boarding" | "delayed" | "new";
+  children: ReactNode;
+}) {
+  return (
+    <span className={`pill pill-${kind}`}>
+      <span aria-hidden="true" className="pill-lamp" />
+      {children}
+    </span>
+  );
+}
+
+/** Terminal roundel — a circular departures seal showing a single split-flap
+ *  cell caught mid-glyph. Replaces the old 落款印 seal. */
+export function Roundel({ size = 56 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64" role="img" aria-label="ptpt" className="select-none">
+      <circle cx="32" cy="32" r="30" fill="var(--color-ground-deep)" stroke="var(--color-shu)" strokeWidth="1.5" />
+      <circle cx="32" cy="32" r="24.5" fill="none" stroke="var(--color-rule)" strokeWidth="1" />
+      <rect x="22" y="19" width="20" height="26" rx="2.5" fill="var(--color-ink)" />
+      <text
+        x="32"
+        y="39"
+        textAnchor="middle"
+        fontFamily="var(--font-mono)"
+        fontWeight="700"
+        fontSize="21"
+        fill="var(--color-ground-deep)"
+      >
+        P
+      </text>
+      <rect x="22" y="31.2" width="20" height="1.6" fill="var(--color-ground-deep)" />
+    </svg>
   );
 }
 
@@ -113,7 +160,8 @@ export function Rule({
   return <span aria-hidden="true" className={`block ${color} ${dim} ${className}`} />;
 }
 
-/** Section: chapter-number margin + Mincho heading + content. Optional eyebrow. */
+/** Section: a departures-board legend header — gate code · eyebrow · hairline
+ *  rule, with a signage heading and a flap-seam underline. */
 export function Section({
   n,
   eyebrow,
@@ -130,20 +178,19 @@ export function Section({
   return (
     <section className={`relative mb-14 sm:mb-20 ${className}`}>
       <header className="mb-6 sm:mb-8">
-        {n !== undefined && (
-          <div className="absolute -left-12 top-0 hidden lg:block">
-            <ChapterNumber n={n} />
-          </div>
-        )}
-        {eyebrow && (
-          <p className="font-gothic text-[11px] sm:text-xs uppercase tracking-[0.25em] text-ink-mute mb-3">
-            {eyebrow}
-          </p>
-        )}
+        <div className="flex items-center gap-3 mb-3">
+          {n !== undefined && <GateTag n={n} />}
+          {eyebrow && (
+            <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-ink-mute">
+              {eyebrow}
+            </p>
+          )}
+          <span aria-hidden="true" className="flex-1 h-px bg-rule" />
+        </div>
         <h2 className="font-mincho text-2xl sm:text-3xl lg:text-4xl text-ink leading-tight">
           {heading}
         </h2>
-        <span aria-hidden="true" className="block h-px w-10 sm:w-12 bg-shu mt-4 sm:mt-5" />
+        <span aria-hidden="true" className="board-seam block w-full mt-4 sm:mt-5" />
       </header>
       {children}
     </section>
@@ -229,26 +276,28 @@ export function InlineMd({ text }: { text: string }) {
   );
 }
 
-/** Hairline-bordered metadata pill in mono (version, license, etc.). */
+/** Hairline-bordered metadata chip in mono — a board placard (version,
+ *  license, SSR, etc.). */
 export function Badge({ children }: { children: ReactNode }) {
   return (
     <span
       className="inline-flex items-center px-2.5 py-1 font-mono text-[11px] tracking-wide text-ink-mute"
-      style={{ border: "1px solid var(--color-rule)", borderRadius: 1 }}
+      style={{
+        border: "1px solid var(--color-rule)",
+        borderRadius: 1,
+        background: "rgba(0, 0, 0, 0.28)",
+      }}
     >
       {children}
     </span>
   );
 }
 
-/** Small vermilion seal-square. Kept understated (single character preferred). */
-export function NewBadge({ label = "新" }: { label?: string }) {
+/** A "NEW" departures flag — amber signal lamp on a board pill. */
+export function NewBadge({ label = "NEW" }: { label?: string }) {
   return (
-    <span
-      className="inline-flex items-center justify-center font-mincho text-[11px] font-bold text-ground bg-shu-deep dark:bg-shu w-5 h-5 select-none"
-      style={{ borderRadius: 1, lineHeight: 1 }}
-      aria-label="new"
-    >
+    <span className="pill pill-new" aria-label="new">
+      <span aria-hidden="true" className="pill-lamp" />
       {label}
     </span>
   );
@@ -264,17 +313,17 @@ export function SnippetBlock({
   language: string;
 }) {
   return (
-    <figure className="mt-5">
-      <figcaption className="flex items-baseline justify-between mb-2">
-        <span className="font-gothic text-xs uppercase tracking-[0.18em] text-ink-mute">
+    <figure className="ticket mt-5">
+      <figcaption className="flex items-baseline justify-between px-4 py-2 border-b border-rule">
+        <span className="font-mono text-[10px] uppercase tracking-[0.22em] text-ink-mute">
           {label}
         </span>
-        <span className="font-mono text-[10px] uppercase tracking-wider text-ink-soft">
+        <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-shu-deep dark:text-shu">
           {language}
         </span>
       </figcaption>
       <pre
-        className="bg-ink text-ground font-mono text-[13px] leading-[1.7] py-5 pr-5 pl-6 overflow-x-auto m-0"
+        className="bg-ground-deep text-ink font-mono text-[13px] leading-[1.7] py-5 pr-5 pl-6 overflow-x-auto m-0"
         style={{ borderLeft: "2px solid var(--color-shu)" }}
       >
         <code>{code}</code>
@@ -310,7 +359,7 @@ export function OptionsTable({
         </thead>
         <tbody>
           {rows.map((row) => (
-            <tr key={row.name} style={{ borderBottom: "1px solid var(--color-rule)" }}>
+            <tr key={row.name} className="flap-row">
               <td className="px-3 py-3 font-mono text-[13px] text-ink whitespace-nowrap align-top">
                 {row.name}
               </td>
@@ -367,9 +416,16 @@ export function AdapterNav({ current, locale }: { current: AdapterKey; locale: L
   return (
     <nav aria-label="ptpt packages" className="mb-10 sm:mb-12 -mx-5 sm:mx-0 overflow-x-auto">
       <div className="inline-block min-w-full px-5 sm:px-0">
+        <div className="flex items-center gap-2 mb-2">
+          <span className="font-mono text-[10px] uppercase tracking-[0.24em] text-ink-soft">
+            Gates
+          </span>
+          <span aria-hidden="true" className="hidden sm:block flex-1 h-px bg-rule" />
+        </div>
         <ul className="flex items-stretch text-sm">
           {ADAPTERS.map((a, i) => {
             const active = a.key === current;
+            const code = a.key === "core" ? "00" : String(i).padStart(2, "0");
             return (
               <li
                 key={a.key}
@@ -380,13 +436,13 @@ export function AdapterNav({ current, locale }: { current: AdapterKey; locale: L
                   to={a.href(locale) as `/${string}`}
                   className={[
                     "flex items-center gap-2 px-3 sm:px-4 py-2 font-mono text-[13px] whitespace-nowrap transition-colors relative",
-                    active
-                      ? "text-ink font-medium"
-                      : "text-ink-mute hover:text-ink dark:hover:text-ink",
+                    active ? "text-ink font-medium" : "text-ink-mute hover:text-ink dark:hover:text-ink",
                   ].join(" ")}
                 >
+                  {active && <span aria-hidden="true" className="pill-lamp text-shu" />}
+                  <span className="text-ink-soft text-[10px] tracking-[0.15em]">{code}</span>
                   <span>{a.short}</span>
-                  {a.isNew && <NewBadge />}
+                  {a.status === "new" && <NewBadge />}
                   {active && (
                     <span
                       aria-hidden="true"
@@ -434,13 +490,20 @@ export function Cta({
   variant?: "primary" | "secondary";
 }) {
   const cls = [
-    "group inline-flex items-center gap-2 px-5 py-3 font-gothic text-[13px] uppercase tracking-[0.18em] transition-colors",
+    "group inline-flex items-center gap-2.5 px-5 py-3 font-gothic text-[13px] uppercase tracking-[0.18em] transition-colors",
     variant === "primary"
-      ? "text-ground bg-ink hover:bg-shu-deep dark:bg-ink dark:text-ground dark:hover:bg-shu"
-      : "text-ink hover:text-shu-deep dark:hover:text-shu",
+      ? "text-ground bg-shu hover:bg-shu-deep"
+      : "text-ink border border-rule hover:border-shu hover:text-shu-deep dark:hover:text-shu",
   ].join(" ");
   const inner = (
     <>
+      {variant === "primary" && (
+        <span
+          aria-hidden="true"
+          className="w-1.5 h-1.5 rounded-full bg-ground/80"
+          style={{ boxShadow: "0 0 0 2px rgba(13,14,17,0.25)" }}
+        />
+      )}
       {children}
       <span aria-hidden="true" className="transition-transform group-hover:translate-x-0.5">
         →

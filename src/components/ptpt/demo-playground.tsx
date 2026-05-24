@@ -78,9 +78,7 @@ function PanelHeading({ children }: { children: React.ReactNode }) {
   return (
     <div className="mb-5 flex items-baseline gap-3">
       <span aria-hidden="true" className="block w-4 h-px bg-shu" />
-      <h2 className="font-gothic text-[11px] uppercase tracking-[0.3em] text-ink-mute">
-        {children}
-      </h2>
+      <h2 className="font-mono text-[11px] uppercase tracking-[0.3em] text-ink-mute">{children}</h2>
     </div>
   );
 }
@@ -231,21 +229,24 @@ export function DemoPlayground({ lang }: { lang: Lang }) {
       <section className="mb-12">
         <PanelHeading>{t.sectionPreview}</PanelHeading>
 
-        <div
-          className="py-10 px-4 bg-ground-card flex justify-center overflow-x-auto"
-          style={{
-            borderTop: "1px solid var(--color-rule)",
-            borderBottom: "1px solid var(--color-rule)",
-          }}
-        >
-          <PatapataBoard
-            cellOptions={{ preset: presets[preset] }}
-            targets={targets}
-            flipMode={flipMode}
-            delayFn={delayFn}
-            className="ptpt-board"
-            style={{ display: "flex", gap: "0.35rem" }}
-          />
+        <div className="board">
+          <div className="board-head flex items-center justify-between gap-4 px-4 sm:px-5 h-9">
+            <span>live board · gate a1</span>
+            <span className="pill pill-ontime" style={{ border: 0, padding: 0 }}>
+              <span aria-hidden="true" className="pill-lamp" />
+              live
+            </span>
+          </div>
+          <div className="py-10 px-4 flex justify-center overflow-x-auto">
+            <PatapataBoard
+              cellOptions={{ preset: presets[preset] }}
+              targets={targets}
+              flipMode={flipMode}
+              delayFn={delayFn}
+              className="ptpt-board"
+              style={{ display: "flex", gap: "0.35rem" }}
+            />
+          </div>
         </div>
       </section>
 

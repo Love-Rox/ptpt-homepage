@@ -1,21 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  tate-chu-yoko favicon — 縦 seal mark.
-  A bold single-character 落款印: cream Mincho 「縦」 sized to fill a deep shu
-  square. Reads cleanly even at 16×16 / 32×32 because there is exactly one
-  glyph carrying the mark. Local Shippori Mincho B1 → Yu Mincho → serif.
+  ptpt favicon — a single split-flap (Solari) cell.
+  A near-black board housing lit by an amber signal edge, a bone glyph "P",
+  and the horizontal flap seam that splits it across the middle. Reads cleanly
+  at 16×16 / 32×32 because one glyph carries the mark.
 -->
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
-  <rect width="64" height="64" rx="3" fill="#c8442f"/>
-  <rect x="2" y="2" width="60" height="60" rx="2" fill="none" stroke="#f4ede2" stroke-width="0.75" opacity="0.55"/>
+  <!-- board housing -->
+  <rect width="64" height="64" rx="9" fill="#0d0e11"/>
+  <!-- amber signal edge -->
+  <rect x="1.75" y="1.75" width="60.5" height="60.5" rx="7.25" fill="none" stroke="#f2b134" stroke-width="2"/>
+  <!-- bone glyph -->
   <text
-    x="50%"
-    y="51%"
+    x="32"
+    y="34"
     text-anchor="middle"
     dominant-baseline="central"
-    font-family="'Shippori Mincho B1', 'Yu Mincho', 'Hiragino Mincho ProN', serif"
-    font-weight="800"
-    font-size="62"
-    fill="#f4ede2"
-  >縦</text>
+    font-family="'Martian Mono', 'SFMono-Regular', ui-monospace, 'Menlo', 'Consolas', monospace"
+    font-weight="700"
+    font-size="44"
+    fill="#f0e8d0"
+  >P</text>
+  <!-- the flap seam splitting the glyph, with a hairline highlight below -->
+  <rect x="5" y="31" width="54" height="2.2" fill="#0d0e11"/>
+  <rect x="5" y="33.2" width="54" height="0.9" fill="#f0e8d0" opacity="0.16"/>
 </svg>

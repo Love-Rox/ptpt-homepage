@@ -1,9 +1,9 @@
 {
-  "title": "@love-rox/ptpt-react — Tate-chu-yoko component for React",
+  "title": "@love-rox/ptpt-react — split-flap components for React",
   "hero": {
     "eyebrow": "React adapter",
     "heading": "@love-rox/ptpt-react",
-    "tagline": "A `<Patapata>` component for React 17+. Walks children recursively and wraps half-width alphanumeric runs in `<span class=\"ptpt\">`. Produces deterministic, SSR-safe output.",
+    "tagline": "Split-flap displays for React: `<Patapata>` (one cell), `<PatapataBoard>` (a row of them), and the `useFlipCell` hook. Client components, so they work in RSC setups like Waku and Next.js.",
     "version": "v0.1.0",
     "ctaNpm": "View on npm",
     "ctaGithub": "GitHub",
@@ -12,17 +12,17 @@
   },
   "install": {
     "heading": "Install",
-    "description": "`@love-rox/ptpt-core` comes along as a dependency — no separate install needed."
+    "description": "`@love-rox/ptpt-core` comes along as a dependency. `react` (>=18) is a peer dependency. Import `@love-rox/ptpt-core/styles.css` once for the default look."
   },
   "usage": {
     "heading": "Usage",
-    "description": "Wrap the vertical content in `<Patapata>` inside an element with `writing-mode: vertical-rl`. Only string children are rewritten; element children are walked recursively without being touched.",
+    "description": "Render `<PatapataBoard>` with a `targets` string — the cell count comes from its length — and `cellOptions` shared by every cell. Each character flips to its place; the board staggers them. Changing `targets` triggers a new flip.",
     "snippetLabel": "React"
   },
   "options": {
     "heading": "Options",
-    "description": "`<Patapata>` accepts the options below. The shared options behave identically to the Vue, rehype, and Astro adapters.",
-    "sharedLabel": "Shared options",
+    "description": "`<Patapata>` accepts every `CellOptions` field plus the component props below. The shared options behave identically to the Vue, rehype, and Astro adapters.",
+    "sharedLabel": "Shared cell options",
     "componentLabel": "Component-only props",
     "columns": {
       "name": "Option",
@@ -34,14 +34,14 @@
   "behavior": {
     "heading": "Behavior notes",
     "items": [
-      "Runs are not joined across element boundaries — `<em>12</em>34` produces two separate spans.",
-      "Full-width alphanumerics (`Ａ–Ｚ` / `０–９`) are left alone because they already render upright in vertical text.",
-      "SSR-safe — server and client emit the same DOM, so there's no hydration mismatch.",
-      "Children that contain React elements are still walked recursively; text inside those elements is processed too."
+      "Structural options are read on mount — pass a `key` to rebuild a cell with new ones; changing `target` / `targets` just triggers a flip.",
+      "`flipMode=\"replace\"` (default) coalesces rapid updates to the latest target; `flipMode=\"queue\"` runs each in order.",
+      "The board is one `role=\"status\"` live region; `onFlipComplete` fires after each flip settles.",
+      "Pass preset objects (`preset={digitsPreset}`), not strings — a string is treated as the literal flap characters, not a preset name."
     ]
   },
   "related": {
     "heading": "Other adapters",
-    "description": "Using Vue? The Vue adapter has the same API. On a Markdown / Astro pipeline? The rehype and Astro adapters do this at build time, with no React dependency in the bundle."
+    "description": "On Vue? The Vue adapter has the same API. Rendering Markdown or building a static site? The rehype and Astro adapters do this at build time, with no React in the bundle."
   }
 }

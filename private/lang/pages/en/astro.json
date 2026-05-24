@@ -1,9 +1,9 @@
 {
-  "title": "@love-rox/ptpt-astro — Tate-chu-yoko integration for Astro",
+  "title": "@love-rox/ptpt-astro — split-flap integration & components for Astro",
   "hero": {
     "eyebrow": "Astro integration",
     "heading": "@love-rox/ptpt-astro",
-    "tagline": "Astro 4+ only. Auto-registers the rehype plugin on Astro's Markdown / MDX pipeline, and ships a `<Patapata>` component for `.astro` files.",
+    "tagline": "Astro 4+ only. The integration wires up the Markdown plugin, injects the stylesheet, and runs the client hydrator for you. Ships `Patapata.astro` and `PatapataBoard.astro` to drop a display straight into a template.",
     "version": "v0.1.0",
     "isNew": true,
     "ctaNpm": "View on npm",
@@ -13,37 +13,37 @@
   },
   "install": {
     "heading": "Install",
-    "description": "Peer dependency: `astro >= 4`. `@love-rox/ptpt-core` and `@love-rox/ptpt-rehype` are pulled in automatically."
+    "description": "Peer dependencies: `astro >= 4` and `@love-rox/ptpt-core`. `@love-rox/ptpt-rehype` is pulled in automatically."
   },
   "twoPieces": {
     "heading": "Two pieces",
     "items": [
       {
         "name": "ptpt() integration",
-        "description": "Registers `@love-rox/ptpt-rehype` on Astro's Markdown / MDX pipeline so half-width alphanumerics in your `.md` and `.mdx` content are wrapped automatically at build time."
+        "description": "Registers `@love-rox/ptpt-rehype` on Astro's Markdown / MDX pipeline, injects `@love-rox/ptpt-core/styles.css`, and runs the client hydrator on every page — so marked content in `.md` / `.mdx` animates with no extra wiring."
       },
       {
-        "name": "<Patapata> component",
-        "description": "An Astro component to wrap a slot inside `.astro` files explicitly — useful for body content authored directly in `.astro`, outside the Markdown pipeline."
+        "name": "<Patapata> / <PatapataBoard>",
+        "description": "Astro components that emit static, readable markup the hydrator animates on load. `<Patapata>` is one inline display; `<PatapataBoard>` splits on newlines into rows."
       }
     ]
   },
   "usage": {
     "heading": "Usage",
-    "description": "Register the integration in `astro.config.mjs`. That alone makes Markdown / MDX content patapata-aware.",
+    "description": "Add the integration to `astro.config.mjs`. That alone makes marked Markdown / MDX content animate and injects the stylesheet + hydrator.",
     "integrationLabel": "astro.config.mjs",
     "withOptionsHeading": "With options",
-    "withOptionsDescription": "Forward any `rehype-ptpt` options through the integration call.",
+    "withOptionsDescription": "Toggle each piece, and forward rehype options (like `defaultPreset`) through `markdown`.",
     "withOptionsLabel": "astro.config.mjs (with options)",
     "componentHeading": "Inside an `.astro` file",
-    "componentDescription": "For body content authored directly in `.astro` (no Markdown in the picture), use the `<Patapata>` component.",
+    "componentDescription": "Drop a display straight into a template with the `<Patapata>` component. `preset` here is a preset name, resolved by the hydrator.",
     "componentLabel": "src/pages/example.astro"
   },
   "options": {
     "heading": "Options",
-    "description": "The shared options behave exactly as they do in the React / Vue / rehype adapters. There's just one integration-only knob.",
-    "sharedLabel": "Shared options + rehype passthrough",
-    "integrationLabel": "Integration-only",
+    "description": "The shared cell options (carried via `data-ptpt-*`) behave exactly as they do in the React / Vue / rehype adapters. The integration itself has three toggles.",
+    "sharedLabel": "Shared cell options + rehype passthrough",
+    "integrationLabel": "Integration options",
     "columns": {
       "name": "Option",
       "type": "Type",
@@ -54,14 +54,14 @@
   "behavior": {
     "heading": "Behavior notes",
     "items": [
-      "Astro is SSG-first, so both pieces run at build time — there's no client-side cost.",
-      "Text inside `<code>` / `<pre>` / `<script>` / `<style>` is skipped by default (configurable via `skipTags`).",
-      "**Idempotent**. Rebuild the same Markdown as many times as you want; the output HTML doesn't drift.",
-      "The `<Patapata>` component delegates to the same `ptpt-rehype` underneath, so Markdown content and `.astro`-authored content behave identically."
+      "Astro is SSG-first, so the plugin runs at build time — the only client cost is the small hydrator that animates the static markup.",
+      "Without JS the boards still render as plain, readable text; hydration just adds the flip.",
+      "`markdown: false` opts out of the Markdown pipeline (e.g. if you only want the components); `styles: false` / `hydrate: false` skip those injections.",
+      "The components and the Markdown plugin share the same `data-ptpt-*` output, so `.astro`-authored and Markdown content behave identically."
     ]
   },
   "related": {
     "heading": "Other adapters",
-    "description": "Not using Astro? Drop the [rehype plugin](./rehype) directly into your `unified` pipeline. Need runtime wrapping in the app? Use the [React](./react) or [Vue](./vue) component."
+    "description": "Not using Astro? Drop the [rehype plugin](./rehype) into your `unified` pipeline directly. Need runtime control in an app? Use the [React](./react) or [Vue](./vue) components."
   }
 }

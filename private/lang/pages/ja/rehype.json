@@ -1,9 +1,9 @@
 {
-  "title": "@love-rox/ptpt-rehype - unified パイプライン用のパタパタプラグイン",
+  "title": "@love-rox/ptpt-rehype - Markdown / HTML からスプリットフラップ盤面を生成",
   "hero": {
     "eyebrow": "rehype プラグイン",
     "heading": "@love-rox/ptpt-rehype",
-    "tagline": "`unified` の HAST パイプラインに組み込んで、build 時にパタパタを適用する rehype プラグイン。Markdown / MDX / 静的 HTML — どこでも、クライアントランタイムなしで動きます。",
+    "tagline": "印を付けた Markdown / HTML をスプリットフラップ盤面に変換する rehype プラグイン + クライアント hydrator。build 時に `data-ptpt-*` 付きの読めるテキストを出力し、`hydrate` がブラウザでアニメーションさせます。JS がなくても文字は読めます。",
     "version": "v0.1.0",
     "ctaNpm": "npm で見る",
     "ctaGithub": "GitHub",
@@ -12,21 +12,21 @@
   },
   "install": {
     "heading": "インストール",
-    "description": "`@love-rox/ptpt-core` は依存として自動的に引き込まれます。`unified` ベースのビルド（remark / rehype / Astro / eleventy など）で使えます。Astro 専用に最適化された API が必要な場合は [Astro 版](./astro) を使ってください。"
+    "description": "`@love-rox/ptpt-core` はピア依存です（クライアント hydrator が利用します）。`unified` ベースのビルド（remark / rehype / Astro / eleventy など）で使えます。Astro 専用に最適化された API が必要な場合は [Astro 版](./astro) を使ってください。"
   },
   "usage": {
     "heading": "Markdown パイプラインに組み込む",
-    "description": "`remark-rehype` のあと、HAST が確定したタイミングで `rehypePtpt` を挟むだけです。HTML として出力される時点で、パタパタラッピングは済んでいます。",
+    "description": "`rehypePlugins` に `rehypePtpt` を追加します。認識される入力は2種類——マーカークラスを付けたインライン要素（`<span class=\"patapata\">HELLO</span>`）と、` ```patapata ` でタグ付けしたフェンス（1行が盤面1行）です。あとは `hydrate()` が見つけたものをすべて動かします。",
     "snippetLabel": "Markdown → HTML",
-    "htmlOnlyHeading": "HTML だけのパイプライン",
-    "htmlOnlyDescription": "Markdown を介さず、HTML in / HTML out なら同じ要領で:",
-    "htmlOnlyLabel": "HTML → HTML"
+    "htmlOnlyHeading": "クライアントで hydrate する",
+    "htmlOnlyDescription": "プラグインは静的なマークアップを出力するだけです。ブラウザで `hydrate` を一度呼べば、出力された `[data-ptpt-targets]` をすべてアニメーション化します:",
+    "htmlOnlyLabel": "client.ts"
   },
   "options": {
     "heading": "オプション",
-    "description": "共通オプション（`target` / `combine` / `include` / `exclude` / `maxLength` / `excludeWords`）はすべて React / Vue / Astro と同じ意味で動きます。",
-    "sharedLabel": "共通オプション",
-    "pluginLabel": "rehype プラグイン専用オプション",
+    "description": "プラグインは `className` / `fenceLanguage` / `defaultPreset` を受け取ります。下記の共通セルオプションは盤面ごとに `data-ptpt-*` 属性から読まれ、React / Vue / Astro と同じ意味で動きます。",
+    "sharedLabel": "共通セルオプション（data-ptpt-* 経由）",
+    "pluginLabel": "rehype プラグインオプション",
     "columns": {
       "name": "オプション",
       "type": "型",
@@ -37,14 +37,14 @@
   "behavior": {
     "heading": "挙動の注記",
     "items": [
-      "**冪等です**。同じ HAST に2回プラグインを適用しても、出力は1回適用したときと同じ。span が二重になったりはしません。",
-      "`skipTags` のデフォルト（`code` / `pre` / `script` / `style`）が、コードサンプルや埋め込み JSON がパタパタ化されるのを防ぎます。",
-      "`<em>12</em>34` のように要素境界をまたぐ文字列は連結されず、別々のスパンになります。",
-      "`maxLength` / `excludeWords` で対象外になった run はプレーンテキストに戻り、隣接するテキストと自動的にマージされます。"
+      "**プログレッシブです**。build はプレーンで読めるテキストを出力するので、JS がなくても内容は残ります。`hydrate` はアニメーションを足すだけです。",
+      "インラインのマーカーは `<span class=\"ptpt\" data-ptpt-targets=\"…\">` になり、` ```patapata ` ブロックは1行ごとの盤面行になります。",
+      "マーカーに付けた `data-preset` / `data-duration` / `data-direction` は、出力の `data-ptpt-*` にそのまま引き継がれます。",
+      "選んだプリセットは対象文字をすべて含んでいる必要があります。含まないとその盤面は空欄になります——混在テキストには `default` / `alphanumeric` を選んでください。"
     ]
   },
   "related": {
     "heading": "Astro を使っているなら",
-    "description": "Astro 4+ で `.md` / `.mdx` / `.astro` を扱うなら、Markdown パイプラインへの登録と `<Patapata>` コンポーネントが同梱された [Astro インテグレーション](./astro) のほうが手数が少なく済みます。"
+    "description": "Astro 4+ で `.md` / `.mdx` / `.astro` を扱うなら、このプラグインの登録・スタイルシートの注入・hydrator の実行をまとめて行い、`.astro` 用の `<Patapata>` コンポーネントも同梱した [Astro インテグレーション](./astro) が便利です。"
   }
 }

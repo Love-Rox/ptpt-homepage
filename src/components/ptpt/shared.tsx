@@ -482,9 +482,10 @@ export const SHARED_OPTIONS = {
     },
     {
       name: "direction",
-      type: "'forward' | 'backward'",
+      type: "'forward' | 'shortest'",
       default: "'forward'",
-      description: "フレームのリングをめくる向き。",
+      description:
+        "フレームのリングをめくる向き。`shortest` は近いほうへ逆回りすることもあります。",
     },
     {
       name: "reducedMotion",
@@ -516,9 +517,10 @@ export const SHARED_OPTIONS = {
     },
     {
       name: "direction",
-      type: "'forward' | 'backward'",
+      type: "'forward' | 'shortest'",
       default: "'forward'",
-      description: "Direction taken through the frame ring.",
+      description:
+        "Direction taken through the frame ring. `shortest` may reverse to reach a nearer flap.",
     },
     {
       name: "reducedMotion",
@@ -646,43 +648,42 @@ export const BOARD_OPTIONS = {
 export const REHYPE_OPTIONS = {
   ja: [
     {
-      name: "preset",
-      type: "string",
-      default: "'default'",
-      description: "生成する盤面のフラップセット。",
-    },
-    {
       name: "className",
-      type: "string | string[]",
-      default: "'ptpt'",
-      description: "ラップ要素に付与するクラス名（配列で複数指定可）。",
+      type: "string",
+      default: "'patapata'",
+      description: "インライン要素を盤面に変換する目印となるクラス名。",
     },
     {
-      name: "skipTags",
-      type: "string[]",
-      default: "['code', 'pre', 'script', 'style']",
-      description: "走査をスキップするタグ。",
+      name: "fenceLanguage",
+      type: "string",
+      default: "'patapata'",
+      description: "盤面に変換するフェンスコードブロックのコードフェンス言語。",
+    },
+    {
+      name: "defaultPreset",
+      type: "string",
+      default: "undefined",
+      description: "要素／ブロックがプリセットを指定しないときに使うプリセット名。",
     },
   ] as OptionRow[],
   en: [
     {
-      name: "preset",
-      type: "string",
-      default: "'default'",
-      description: "The flap set used for generated boards.",
-    },
-    {
       name: "className",
-      type: "string | string[]",
-      default: "'ptpt'",
-      description:
-        "Class name(s) applied to the wrapping element. Pass an array for multiple classes.",
+      type: "string",
+      default: "'patapata'",
+      description: "Class that marks an inline element for conversion into a board.",
     },
     {
-      name: "skipTags",
-      type: "string[]",
-      default: "['code', 'pre', 'script', 'style']",
-      description: "Tags whose subtrees are left untouched.",
+      name: "fenceLanguage",
+      type: "string",
+      default: "'patapata'",
+      description: "Code-fence language that marks a fenced block for conversion.",
+    },
+    {
+      name: "defaultPreset",
+      type: "string",
+      default: "undefined",
+      description: "Preset name applied when an element / block specifies none.",
     },
   ] as OptionRow[],
 };
@@ -691,19 +692,43 @@ export const ASTRO_INTEGRATION_OPTIONS = {
   ja: [
     {
       name: "markdown",
-      type: "boolean",
+      type: "boolean | RehypePtptOptions",
       default: "true",
       description:
-        "Markdown / MDX パイプラインに `rehype-ptpt` を登録するか。`false` にすると `<Patapata>` コンポーネントだけ使う構成にできます。",
+        "Markdown / MDX パイプラインに `rehypePtpt` を登録するか。オブジェクトを渡すと rehype 側のオプション（`defaultPreset` など）を転送できます。`false` でオフ。",
+    },
+    {
+      name: "styles",
+      type: "boolean",
+      default: "true",
+      description: "各ページに `@love-rox/ptpt-core/styles.css` を注入するか。",
+    },
+    {
+      name: "hydrate",
+      type: "boolean",
+      default: "true",
+      description: "読み込み時に走るクライアント hydrator を注入するか。",
     },
   ] as OptionRow[],
   en: [
     {
       name: "markdown",
-      type: "boolean",
+      type: "boolean | RehypePtptOptions",
       default: "true",
       description:
-        "Whether to register `rehype-ptpt` on the Markdown / MDX pipeline. Set to `false` to opt out (e.g. if you only want the `<Patapata>` component).",
+        "Register `rehypePtpt` on the Markdown / MDX pipeline. Pass an object to forward rehype options (e.g. `defaultPreset`); set `false` to opt out.",
+    },
+    {
+      name: "styles",
+      type: "boolean",
+      default: "true",
+      description: "Inject `@love-rox/ptpt-core/styles.css` on every page.",
+    },
+    {
+      name: "hydrate",
+      type: "boolean",
+      default: "true",
+      description: "Inject the client hydrator that runs on load.",
     },
   ] as OptionRow[],
 };

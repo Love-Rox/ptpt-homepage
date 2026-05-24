@@ -1,9 +1,9 @@
 {
-  "title": "@love-rox/ptpt-react - React 用のパタパタコンポーネント",
+  "title": "@love-rox/ptpt-react - React 用のスプリットフラップコンポーネント",
   "hero": {
     "eyebrow": "React アダプタ",
     "heading": "@love-rox/ptpt-react",
-    "tagline": "React 17+ 向けの `<Patapata>` コンポーネント。子要素を再帰的に走査し、半角英数字の run を `<span class=\"ptpt\">` で包みます。SSR で決定性のある DOM を保証します。",
+    "tagline": "React 向けのスプリットフラップ・ディスプレイ。`<Patapata>`（1セル）、`<PatapataBoard>`（一列）、`useFlipCell` フックを提供します。クライアントコンポーネントなので Waku や Next.js の RSC 構成でも動きます。",
     "version": "v0.1.0",
     "ctaNpm": "npm で見る",
     "ctaGithub": "GitHub",
@@ -12,17 +12,17 @@
   },
   "install": {
     "heading": "インストール",
-    "description": "`@love-rox/ptpt-core` は依存として自動的に引き込まれるので、別途インストールする必要はありません。"
+    "description": "`@love-rox/ptpt-core` は依存として自動的に引き込まれます。`react`（>=18）はピア依存です。既定の見た目には `@love-rox/ptpt-core/styles.css` を一度 import してください。"
   },
   "usage": {
     "heading": "使い方",
-    "description": "縦組みにしたい親要素（`writing-mode: vertical-rl`）の中で、対象範囲を `<Patapata>` で包むだけです。children の文字列ノードだけを書き換え、要素ノードはそのまま再帰的に処理します。",
+    "description": "`<PatapataBoard>` に `targets` 文字列を渡すだけ——セル数は文字列の長さから決まります。`cellOptions` は全セルに共通で適用されます。各文字が所定の値までめくれ、盤面は時間差で動きます。`targets` を変えると新しいフリップが走ります。",
     "snippetLabel": "React"
   },
   "options": {
     "heading": "オプション",
-    "description": "`<Patapata>` は以下のオプションを受け付けます。共通オプションは Vue / rehype / Astro と完全に同じ意味で動きます。",
-    "sharedLabel": "共通オプション",
+    "description": "`<Patapata>` は `CellOptions` のすべてのフィールドに加え、下記のコンポーネント専用プロパティを受け付けます。共通オプションは Vue / rehype / Astro と完全に同じ意味で動きます。",
+    "sharedLabel": "共通セルオプション",
     "componentLabel": "コンポーネント専用プロパティ",
     "columns": {
       "name": "オプション",
@@ -34,14 +34,14 @@
   "behavior": {
     "heading": "挙動の注記",
     "items": [
-      "`<em>12</em>34` のように要素境界をまたぐ文字列は連結されず、別々のスパンになります。",
-      "全角英数字（`Ａ〜Ｚ` / `０〜９`）は既定で対象外。縦組みでも既に正立して表示されるためです。",
-      "SSR-safe。サーバーとクライアントで同じ DOM を生成するため hydration mismatch は起きません。",
-      "children に React Element が含まれていても、その中のテキストノードまで再帰的に処理します。"
+      "構造に関わるオプションはマウント時に読まれます。作り直したいときは `key` を渡してください。`target` / `targets` を変えるだけならフリップが走るだけです。",
+      "`flipMode=\"replace\"`（既定）は連続更新を最新の目標にまとめます。`flipMode=\"queue\"` は順番に消化します。",
+      "盤面は1つの `role=\"status\"` ライブリージョンです。`onFlipComplete` は各フリップが落ち着いたあとに呼ばれます。",
+      "preset には文字列ではなくプリセットオブジェクト（`preset={digitsPreset}`）を渡してください。文字列はプリセット名ではなく、フラップの文字列そのものとして扱われます。"
     ]
   },
   "related": {
     "heading": "他のアダプタ",
-    "description": "Vue を使っているなら同じ API の Vue 版があります。Markdown / Astro パイプラインなら React を持ち込まずに rehype / Astro 版が使えます。"
+    "description": "Vue を使っているなら同じ API の Vue 版があります。Markdown のレンダリングや静的サイトの生成なら、React を持ち込まずに rehype / Astro 版が build 時に処理します。"
   }
 }

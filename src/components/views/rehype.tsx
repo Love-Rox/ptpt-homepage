@@ -14,31 +14,30 @@ const PKG = "@love-rox/ptpt-rehype";
 const markdownSnippet = `import { unified } from "unified";
 import remarkParse from "remark-parse";
 import remarkRehype from "remark-rehype";
+import rehypeRaw from "rehype-raw";
 import rehypeStringify from "rehype-stringify";
 import rehypePtpt from "@love-rox/ptpt-rehype";
+
+// Markdown marks a board with the marker class (or a \`\`\`patapata fence):
+const md = '<span class="patapata" data-preset="alphanumeric">TOKYO</span>';
 
 const html = String(
   await unified()
     .use(remarkParse)
-    .use(remarkRehype)
+    .use(remarkRehype, { allowDangerousHtml: true })
+    .use(rehypeRaw)
     .use(rehypePtpt)
     .use(rehypeStringify)
-    .process("TOKYO"),
+    .process(md),
 );
-// <span class="ptpt" data-target="TOKYO">…split-flap markup…</span>`;
+// <span class="ptpt" data-ptpt-targets="TOKYO" data-ptpt-preset="alphanumeric">TOKYO</span>`;
 
-const htmlOnlySnippet = `import { unified } from "unified";
-import rehypeParse from "rehype-parse";
-import rehypeStringify from "rehype-stringify";
-import rehypePtpt from "@love-rox/ptpt-rehype";
+const htmlOnlySnippet = `// Browser entry — animate everything the plugin emitted.
+import { hydrate } from "@love-rox/ptpt-rehype/client";
+import "@love-rox/ptpt-core/styles.css";
 
-const html = String(
-  await unified()
-    .use(rehypeParse, { fragment: true })
-    .use(rehypePtpt)
-    .use(rehypeStringify)
-    .process("<p>TOKYO</p>"),
-);`;
+// scans the document for [data-ptpt-targets] and flips them into boards
+hydrate();`;
 
 export default async function RehypeView({ locale }: { locale: Locale }) {
   const content = data[locale];

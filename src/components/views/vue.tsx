@@ -13,12 +13,13 @@ const PKG = "@love-rox/ptpt-vue";
 
 const vueSnippet = `<script setup lang="ts">
 import { PatapataBoard } from "@love-rox/ptpt-vue";
+import { alphanumericPreset } from "@love-rox/ptpt-core/presets/alphanumeric";
 import "@love-rox/ptpt-core/styles.css";
 </script>
 
 <template>
   <PatapataBoard
-    :cell-options="{ preset: 'alphanumeric' }"
+    :cell-options="{ preset: alphanumericPreset }"
     targets="TOKYO  "
     flip-mode="replace"
   />

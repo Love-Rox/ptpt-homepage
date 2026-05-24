@@ -12,12 +12,13 @@ const landing = { en: landingEn, ja: landingJa };
 const PKG = "@love-rox/ptpt-react";
 
 const reactSnippet = `import { PatapataBoard } from "@love-rox/ptpt-react";
+import { alphanumericPreset } from "@love-rox/ptpt-core/presets/alphanumeric";
 import "@love-rox/ptpt-core/styles.css";
 
 export function Departures() {
   return (
     <PatapataBoard
-      cellOptions={{ preset: "alphanumeric" }}
+      cellOptions={{ preset: alphanumericPreset }}
       targets="TOKYO  "
       flipMode="replace"
     />

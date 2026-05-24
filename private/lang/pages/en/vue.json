@@ -1,9 +1,9 @@
 {
-  "title": "@love-rox/ptpt-vue — Tate-chu-yoko component for Vue 3",
+  "title": "@love-rox/ptpt-vue — split-flap components for Vue 3",
   "hero": {
     "eyebrow": "Vue 3 adapter",
     "heading": "@love-rox/ptpt-vue",
-    "tagline": "A `<Patapata>` component for Vue 3. Same options and same behavior as the React adapter — drops straight into a Vue app.",
+    "tagline": "Split-flap displays for Vue 3: `<Patapata>`, `<PatapataBoard>`, and a `useFlipCell` composable. Same options and behavior as the React adapter — drops straight into a Vue app.",
     "version": "v0.1.0",
     "ctaNpm": "View on npm",
     "ctaGithub": "GitHub",
@@ -12,17 +12,17 @@
   },
   "install": {
     "heading": "Install",
-    "description": "`@love-rox/ptpt-core` comes along as a dependency — no separate install needed."
+    "description": "`@love-rox/ptpt-core` comes along as a dependency. `vue` (>=3.4) is a peer dependency. Import `@love-rox/ptpt-core/styles.css` once for the default look."
   },
   "usage": {
     "heading": "Usage",
-    "description": "Import in `<script setup>` and use `<Patapata>` as a child of a vertically-written parent. Only string slot content is rewritten; element nodes are walked recursively without being touched.",
+    "description": "Import in `<script setup>` and bind a `targets` string to `<PatapataBoard>`. The cell count comes from its length; `cell-options` apply to every cell, and `class` / `style` fall through to the root.",
     "snippetLabel": "Vue 3"
   },
   "options": {
     "heading": "Options",
-    "description": "The Vue component accepts the exact same options as the React component. Shared options also line up 1:1 with the rehype and Astro adapters.",
-    "sharedLabel": "Shared options",
+    "description": "The Vue component accepts the exact same options as the React component. Shared cell options also line up 1:1 with the rehype and Astro adapters.",
+    "sharedLabel": "Shared cell options",
     "componentLabel": "Component-only props",
     "columns": {
       "name": "Option",
@@ -34,14 +34,14 @@
   "behavior": {
     "heading": "Behavior notes",
     "items": [
-      "Runs are not joined across element boundaries — `<em>12</em>34` produces two separate spans.",
-      "Full-width alphanumerics (`Ａ–Ｚ` / `０–９`) are left alone because they already render upright in vertical text.",
-      "SSR-safe — works under Nuxt 3 and other Vue SSR setups; server and client emit the same DOM.",
-      "Walks the slot's VNode tree recursively, only wrapping text nodes."
+      "Options are read on mount — pass a `key` to rebuild; changing `target` / `targets` just triggers a flip.",
+      "Use `flip-mode=\"queue\"` to run rapid updates in order instead of coalescing to the latest with the default `replace`.",
+      "Emits `flip-complete` after each flip settles; the board exposes one `role=\"status\"` live region.",
+      "Pass preset objects (`:preset=\"digitsPreset\"`), not strings — a string is treated as the literal flap characters, not a preset name."
     ]
   },
   "related": {
     "heading": "Other adapters",
-    "description": "Using React? The React adapter has the same API. On a Markdown / Astro pipeline? The rehype and Astro adapters do this at build time, with no Vue dependency in the bundle."
+    "description": "On React? The React adapter has the same API. Rendering Markdown or building a static site? The rehype and Astro adapters do this at build time, with no Vue in the bundle."
   }
 }

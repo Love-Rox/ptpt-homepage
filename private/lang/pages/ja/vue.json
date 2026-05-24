@@ -1,9 +1,9 @@
 {
-  "title": "@love-rox/ptpt-vue - Vue 3 用のパタパタコンポーネント",
+  "title": "@love-rox/ptpt-vue - Vue 3 用のスプリットフラップコンポーネント",
   "hero": {
     "eyebrow": "Vue 3 アダプタ",
     "heading": "@love-rox/ptpt-vue",
-    "tagline": "Vue 3 向けの `<Patapata>` コンポーネント。React 版と同じオプション・同じ挙動で、Vue アプリにそのまま組み込めます。",
+    "tagline": "Vue 3 向けのスプリットフラップ・ディスプレイ。`<Patapata>` / `<PatapataBoard>` と `useFlipCell` コンポーザブルを提供します。React 版と同じオプション・同じ挙動で、Vue アプリにそのまま組み込めます。",
     "version": "v0.1.0",
     "ctaNpm": "npm で見る",
     "ctaGithub": "GitHub",
@@ -12,17 +12,17 @@
   },
   "install": {
     "heading": "インストール",
-    "description": "`@love-rox/ptpt-core` は依存として自動的に引き込まれるので、別途インストールする必要はありません。"
+    "description": "`@love-rox/ptpt-core` は依存として自動的に引き込まれます。`vue`（>=3.4）はピア依存です。既定の見た目には `@love-rox/ptpt-core/styles.css` を一度 import してください。"
   },
   "usage": {
     "heading": "使い方",
-    "description": "`<script setup>` でインポートして、縦組みの親要素の中で `<Patapata>` 子要素として使います。slot 内の文字列のみを書き換え、要素ノードはそのまま再帰的に処理します。",
+    "description": "`<script setup>` でインポートし、`<PatapataBoard>` に `targets` 文字列をバインドします。セル数は文字列の長さから決まり、`cell-options` は全セルに適用されます。`class` / `style` はルート要素にそのまま渡ります。",
     "snippetLabel": "Vue 3"
   },
   "options": {
     "heading": "オプション",
-    "description": "React 版とまったく同じオプションを受け付けます。共通オプションは rehype / Astro とも完全に揃っています。",
-    "sharedLabel": "共通オプション",
+    "description": "React 版とまったく同じオプションを受け付けます。共通セルオプションは rehype / Astro とも完全に揃っています。",
+    "sharedLabel": "共通セルオプション",
     "componentLabel": "コンポーネント専用プロパティ",
     "columns": {
       "name": "オプション",
@@ -34,14 +34,14 @@
   "behavior": {
     "heading": "挙動の注記",
     "items": [
-      "`<em>12</em>34` のように要素境界をまたぐ文字列は連結されず、別々のスパンになります。",
-      "全角英数字（`Ａ〜Ｚ` / `０〜９`）は既定で対象外。縦組みでも既に正立して表示されるためです。",
-      "SSR-safe。Nuxt 3 などでサーバーレンダリングしてもクライアントで同じ DOM を生成します。",
-      "slot に渡された VNode を再帰的に走査し、テキストノードだけをラップ対象とします。"
+      "オプションはマウント時に読まれます。作り直したいときは `key` を渡してください。`target` / `targets` を変えるだけならフリップが走ります。",
+      "既定の `replace`（最新だけにまとめる）に対し、`flip-mode=\"queue\"` を指定すると連続更新を順番に消化します。",
+      "各フリップが落ち着くと `flip-complete` を emit します。盤面は1つの `role=\"status\"` ライブリージョンを持ちます。",
+      "preset には文字列ではなくプリセットオブジェクト（`:preset=\"digitsPreset\"`）を渡してください。文字列はプリセット名ではなく、フラップの文字列そのものとして扱われます。"
     ]
   },
   "related": {
     "heading": "他のアダプタ",
-    "description": "React を使っているなら同じ API の React 版があります。Markdown / Astro パイプラインなら Vue を持ち込まずに rehype / Astro 版が使えます。"
+    "description": "React を使っているなら同じ API の React 版があります。Markdown のレンダリングや静的サイトの生成なら、Vue を持ち込まずに rehype / Astro 版が build 時に処理します。"
   }
 }

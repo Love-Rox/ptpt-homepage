@@ -52,10 +52,10 @@ export default async function LandingView({ locale }: { locale: Locale }) {
           a "Home" by itself doesn't add value for the root URL. */}
 
       {/* —— HERO ——————————————————————————————————————————————————————
-          The vertical Mincho sample is the protagonist: it gets the larger
-          column (7/12 on lg+), large type, and a faint giant 「縦」 watermark
-          behind it. The horizontal metadata + CTAs sit on the left in a
-          narrower column. Reader is met by typography first. */}
+          The live split-flap board is the protagonist: it gets the larger
+          column (7/12 on lg+) and a faint giant 「ぱ」 watermark behind it.
+          The metadata + CTAs sit on the left in a narrower column. The
+          reader is met by a flipping board first. */}
       <section className="relative px-5 sm:px-6 lg:px-12 pt-10 pb-16 sm:pt-12 sm:pb-24 lg:pt-20 lg:pb-32 overflow-hidden">
         <div className="max-w-6xl mx-auto grid grid-cols-12 gap-x-6 lg:gap-x-16 items-start">
           {/* Left column: eyebrow + heading + tagline + badges + CTAs (narrower) */}

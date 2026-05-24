@@ -1,9 +1,9 @@
 {
-  "title": "@love-rox/ptpt-rehype — Tate-chu-yoko plugin for unified pipelines",
+  "title": "@love-rox/ptpt-rehype — split-flap displays from Markdown & HTML",
   "hero": {
     "eyebrow": "rehype plugin",
     "heading": "@love-rox/ptpt-rehype",
-    "tagline": "A rehype plugin that slots into a `unified` HAST pipeline and applies patapata at build time. Markdown, MDX, plain HTML — all without a client runtime.",
+    "tagline": "A rehype plugin + client hydrator that turns marked Markdown / HTML into split-flap boards. It emits readable text with `data-ptpt-*` at build time; `hydrate` animates it in the browser. No JS, you still see the text.",
     "version": "v0.1.0",
     "ctaNpm": "View on npm",
     "ctaGithub": "GitHub",
@@ -12,21 +12,21 @@
   },
   "install": {
     "heading": "Install",
-    "description": "`@love-rox/ptpt-core` comes along as a dependency. Use this on any `unified`-based build (remark / rehype / Astro / eleventy / …). If you specifically want Astro ergonomics, the [Astro adapter](./astro) is purpose-built."
+    "description": "`@love-rox/ptpt-core` is a peer dependency (used by the client hydrator). Use this on any `unified`-based build (remark / rehype / Astro / eleventy / …). For Astro ergonomics, the [Astro adapter](./astro) is purpose-built."
   },
   "usage": {
     "heading": "Markdown pipeline",
-    "description": "Slot `rehypePtpt` in between `remark-rehype` and `rehype-stringify` (or wherever your pipeline finalizes HAST). The wrapping is baked into the HTML before it leaves the build.",
+    "description": "Add `rehypePtpt` to your `rehypePlugins`. It recognizes two input forms: an inline element with the marker class (`<span class=\"patapata\">HELLO</span>`) and a fenced code block tagged ` ```patapata ` (one board row per line). Then `hydrate()` animates everything it finds.",
     "snippetLabel": "Markdown → HTML",
-    "htmlOnlyHeading": "HTML-only pipeline",
-    "htmlOnlyDescription": "If there's no Markdown in the picture — just HTML in, HTML out — it's the same idea:",
-    "htmlOnlyLabel": "HTML → HTML"
+    "htmlOnlyHeading": "Hydrate on the client",
+    "htmlOnlyDescription": "The plugin only emits static markup. Call `hydrate` once in the browser to animate every `[data-ptpt-targets]` it produced:",
+    "htmlOnlyLabel": "client.ts"
   },
   "options": {
     "heading": "Options",
-    "description": "The shared options — `target`, `combine`, `include`, `exclude`, `maxLength`, `excludeWords` — behave exactly as they do in the React, Vue, and Astro adapters.",
-    "sharedLabel": "Shared options",
-    "pluginLabel": "rehype plugin-only options",
+    "description": "The plugin takes `className`, `fenceLanguage`, and `defaultPreset`. The shared cell options below are read per board from `data-ptpt-*` attributes and behave exactly as they do in the React, Vue, and Astro adapters.",
+    "sharedLabel": "Shared cell options (via data-ptpt-*)",
+    "pluginLabel": "rehype plugin options",
     "columns": {
       "name": "Option",
       "type": "Type",
@@ -37,14 +37,14 @@
   "behavior": {
     "heading": "Behavior notes",
     "items": [
-      "**Idempotent**. Running the plugin twice on the same HAST gives the same output as running it once — no doubled spans.",
-      "The default `skipTags` (`code` / `pre` / `script` / `style`) keeps code samples and embedded JSON safe from accidental wrapping.",
-      "Runs are not joined across element boundaries — `<em>12</em>34` produces two separate spans.",
-      "Runs filtered out by `maxLength` or `excludeWords` are demoted back to plain text and merged into the surrounding text segment automatically."
+      "**Progressive**. The build emits plain, readable text; without JS the content is still there — `hydrate` only adds the animation.",
+      "Inline markers become `<span class=\"ptpt\" data-ptpt-targets=\"…\">`; ` ```patapata ` blocks become one row per line.",
+      "`data-preset` / `data-duration` / `data-direction` on a marker carry through to `data-ptpt-*` on the output.",
+      "The chosen preset must contain every character in the target, or that board is left blank — pick `default` / `alphanumeric` for mixed text."
     ]
   },
   "related": {
     "heading": "If you're on Astro",
-    "description": "If you're on Astro 4+ and dealing with `.md` / `.mdx` / `.astro`, the [Astro integration](./astro) wires up the Markdown pipeline and ships a `<Patapata>` component for `.astro` files — fewer moving parts to assemble yourself."
+    "description": "If you're on Astro 4+ and dealing with `.md` / `.mdx` / `.astro`, the [Astro integration](./astro) registers this plugin, injects the stylesheet, and runs the hydrator for you — and ships `<Patapata>` components for `.astro` files."
   }
 }

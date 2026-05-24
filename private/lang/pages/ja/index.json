@@ -1,59 +1,59 @@
 {
-  "title": "patapata - パタパタを自動で組版するnpmパッケージ",
+  "title": "ptpt - Web で動かすスプリットフラップ（パタパタ）ディスプレイ",
   "hero": {
     "eyebrow": "npm パッケージ",
-    "heading": "patapata",
-    "tagline": "日本語の縦組み本文で、半角英数字を自動的に「パタパタ」として組版する軽量ライブラリ。書き手はプレーンテキストのままで、組版はライブラリに任せましょう。",
+    "heading": "パタパタ",
+    "tagline": "空港の発車標、Solari di Udine、Vestaboard——あのスプリットフラップ（パタパタ）式ディスプレイを Web で再現する軽量ライブラリ。本質は「*待つ*」こと。ptpt はフラップがめくれるアナログな間を、あえて残します。",
     "ctaDemo": "デモを触る",
     "ctaNpm": "npm で見る",
     "ctaGithub": "GitHub",
     "badges": {
       "version": "v0.1.0",
       "license": "MIT",
-      "ssr": "SSR-safe"
+      "ssr": "RSC 対応"
     }
   },
   "problem": {
-    "heading": "解決したいこと",
-    "body": "新聞や書籍の縦組みでは、半角英数字を横並びのまま正立させる「パタパタ」が当たり前に使われてきました。CSS には `text-combine-upright: all` があるものの、どの文字をまとめるかは開発者が明示しなければなりません。結果として、書き手が原稿の中で `<span class=\"ptpt\">` を毎回書く羽目になりがちです。patapata はこの組版処理を自動化し、書き手を組版の都合から解放します。"
+    "heading": "なぜパタパタなのか",
+    "body": "パタパタ式の盤面は、値を「表示する」のではなく、値に「*たどり着く*」装置です。目的の文字までフラップが一枚ずつめくれていく——その間こそが体験のすべて。ptpt はこの待ち時間をコストではなく価値として扱います。文字も画像も同じ `Frame` という語彙で扱い、`Cell` は一個のパタパタ、`Board` は一列の Cell を時間差で動かして、本物のように盤面を波打たせます。framework-agnostic なコアに、極薄のラッパーを重ねる構成です。"
   },
   "family": {
     "heading": "5つの配布物",
-    "description": "中心にあるのは framework-agnostic なトークナイザー `@love-rox/ptpt-core`。スタックに合わせて好みのアダプタを1つ（または複数）選んでください。`core` は依存として自動的に引き込まれます。",
+    "description": "中心にあるのは framework-agnostic で依存ゼロのエンジン `@love-rox/ptpt-core`（gzip 約 3 KB、ESM、`styles.css` 同梱）。スタックに合わせて好みのアダプタを1つ（または複数）選んでください。`core` は依存として自動的に引き込まれます。",
     "coreLabel": "中心",
     "adaptersLabel": "アダプタ",
     "items": {
       "core": {
         "name": "@love-rox/ptpt-core",
-        "role": "Framework-agnostic トークナイザー",
-        "description": "「パタパタにすべき run はどれか」を判定するロジックの本体。直接使うときは文字列をトークン列に変換します。すべてのアダプタはこの core を内部で使っています。",
+        "role": "Framework-agnostic エンジン",
+        "description": "エンジンの本体。`createCell` / `createBoard`、フレーム、プリセット、ディレイを提供します。依存ゼロ・ESM・gzip 約 3 KB で、`computeFlipPath` のような純粋関数も export 済み。すべてのアダプタはこの core の上に作られています。",
         "version": "v0.1.0"
       },
       "react": {
         "name": "@love-rox/ptpt-react",
         "role": "React コンポーネント",
-        "description": "React 17+ で動く `<Patapata>` コンポーネント。SSR で決定性のある DOM を出力します。",
-        "tagline": "ランタイムで包む",
+        "description": "`<Patapata>` / `<PatapataBoard>` と `useFlipCell` フック。クライアントコンポーネント（`\"use client\"`）なので、Waku や Next.js の RSC 構成にもそのまま収まります。",
+        "tagline": "コンポーネント + フック",
         "version": "v0.1.0"
       },
       "vue": {
         "name": "@love-rox/ptpt-vue",
         "role": "Vue 3 コンポーネント",
-        "description": "Vue 3 向けの `<Patapata>`。React 版と同じオプション・同じ挙動。",
-        "tagline": "ランタイムで包む",
+        "description": "Vue 3 向けの `<Patapata>` / `<PatapataBoard>` と `useFlipCell` コンポーザブル。React 版と同じオプション・同じ挙動です。",
+        "tagline": "コンポーネント + コンポーザブル",
         "version": "v0.1.0"
       },
       "rehype": {
         "name": "@love-rox/ptpt-rehype",
         "role": "rehype プラグイン",
-        "description": "`unified` の HAST パイプラインに組み込んで、build 時にパタパタを適用。クライアントランタイム不要。",
-        "tagline": "ビルド時に包む",
+        "description": "印を付けた Markdown / HTML をパタパタ盤面に変換します。build 時に `data-ptpt-*` 付きの読めるテキストを出力し、`hydrate` ヘルパが動かします。JS なしでも文字は読めます。",
+        "tagline": "build 時 + hydrate",
         "version": "v0.1.0"
       },
       "astro": {
         "name": "@love-rox/ptpt-astro",
         "role": "Astro インテグレーション + コンポーネント",
-        "description": "Astro 4+ の Markdown / MDX パイプラインに rehype プラグインを自動登録。`.astro` 用の `<Patapata>` コンポーネントも同梱。",
+        "description": "Markdown プラグインの登録、スタイルシートの注入、hydrator の実行をまとめて面倒見ます。`Patapata.astro` / `PatapataBoard.astro` を同梱し、テンプレートに盤面を直接置けます。",
         "tagline": "Astro 専用",
         "version": "v0.1.0",
         "isNew": true
@@ -62,22 +62,22 @@
     "viewLabel": "ページを見る"
   },
   "shared": {
-    "heading": "共通の CSS",
-    "description": "どのアダプタを使っても、生成される `<span class=\"ptpt\">` には同じ CSS を当ててください。Safari の歴史的経緯から `-webkit-text-combine` を併記しておくと安心です。"
+    "heading": "共通のスタイルシート",
+    "description": "`@love-rox/ptpt-core/styles.css` を一度 import すれば、どの盤面もダークなパタパタの見た目で動き出します。幅・高さ・めくる速度・色はすべて `.ptpt-cell` のカスタムプロパティで調整でき、スタイルシートを使わずにクラスを自分で当てる headless 運用も可能です。"
   },
   "behavior": {
     "heading": "全体に共通する性質",
     "items": [
-      "`<em>12</em>34` のように要素境界をまたぐ文字列は連結されず、別々のスパンになります。",
-      "全角英数字（`Ａ〜Ｚ` / `０〜９`）は既定で対象外。縦組みでも既に正立して表示されるためです。",
-      "React / Vue / Astro `<Patapata>` のいずれも SSR-safe で、サーバーとクライアントで同じ DOM を生成します。",
-      "rehype プラグイン（および Astro インテグレーション内部）は冪等です。同じ HAST に2回適用しても出力は変わりません。",
-      "`maxLength` / `excludeWords` で対象外になった run はプレーンテキストに戻り、隣接するテキストと自動的にマージされます。"
+      "**Frame**（フラップ）は text / image / `element` のいずれかで、`slug` で識別します。素の文字列は text フレームに正規化されます。",
+      "`Board` は1つの `role=\"status\"` ライブリージョンです。各セルは `aria-hidden` で、確定した結果だけがスクリーンリーダーに通知されます。",
+      "`prefers-reduced-motion` に自動連動します。`reducedMotion: 'instant'` ならアニメーションせず即座に目標へ切り替えます。",
+      "プリセットと delay 関数は tree-shakable なサブパスで提供。数が増えてもバンドルサイズには影響しません。",
+      "preset には素の文字列ではなく `PresetDefinition` オブジェクトを渡してください。文字列はプリセット名ではなく、フラップの文字列そのものとして解釈されます。"
     ]
   },
   "browser": {
     "heading": "ブラウザ対応",
-    "body": "`writing-mode: vertical-rl` と `text-combine-upright: all` は主要なモダンブラウザで動作します。Safari では歴史的に `-webkit-text-combine: horizontal` を併記しておくと安心です。"
+    "body": "フリップは3枚重ねのハーフセルにかける `transform: rotateX()` と、動く `box-shadow` だけで作っています。すべてのモダンブラウザで動く標準 CSS のみ——3D ライブラリも canvas も依存もありません。"
   },
   "versioning": {
     "heading": "バージョンの揃え方",
@@ -89,7 +89,7 @@
   },
   "cta": {
     "heading": "触ってみる",
-    "body": "設定を変えながらブラウザ上で挙動を確認できるデモを用意しました。",
+    "body": "プリセットとフリップモードを選んで、セルの列が次の行き先へ波打つ様子を確認できるデモを用意しました。本物の発車案内板のように動きます。",
     "button": "デモページを開く"
   }
 }

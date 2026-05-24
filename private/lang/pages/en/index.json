@@ -1,59 +1,59 @@
 {
-  "title": "patapata — Automatic patapata wrapping for vertical Japanese text",
+  "title": "ptpt — split-flap (patapata) departure-board displays for the web",
   "hero": {
     "eyebrow": "npm package",
     "heading": "patapata",
-    "tagline": "A small library that automatically wraps half-width alphanumerics inside vertical Japanese text so CSS `text-combine-upright` can compose them as patapata (パタパタ). Authors write plain text; typesetting is handled for them.",
+    "tagline": "A small library for split-flap displays on the web — the airport departure board, the Solari di Udine, the Vestaboard, recreated in the browser. The point is the *wait*: ptpt keeps the analog ticking on purpose.",
     "ctaDemo": "Try the demo",
     "ctaNpm": "View on npm",
     "ctaGithub": "GitHub",
     "badges": {
       "version": "v0.1.0",
       "license": "MIT",
-      "ssr": "SSR-safe"
+      "ssr": "RSC-ready"
     }
   },
   "problem": {
-    "heading": "What it solves",
-    "body": "Japanese vertical writing (`writing-mode: vertical-rl`) leaves half-width Latin letters and digits lying on their side. The fix — `text-combine-upright: all` — exists, but the developer still has to decide *which* runs to apply it to, usually by wrapping them in `<span class=\"ptpt\">` by hand. That chore leaks into manuscripts, CMSes, and Markdown. patapata does the wrapping for you, so authors can keep writing plain text."
+    "heading": "Why split-flap",
+    "body": "A split-flap board doesn't just show a value — it *arrives* at one. The flaps tick through every glyph in between, and the wait is the whole experience. ptpt treats that delay as a feature, not a cost: text and images flip through the same `Frame` vocabulary, a `Cell` is one flapping unit, and a `Board` staggers a row of them so the whole display ripples like the real thing. A framework-agnostic core, with paper-thin wrappers on top."
   },
   "family": {
     "heading": "Five packages",
-    "description": "At the center is `@love-rox/ptpt-core`, a framework-agnostic tokenizer. Pick whichever adapter (or adapters) suits your stack — `core` is pulled in automatically as a dependency.",
+    "description": "At the center is `@love-rox/ptpt-core`, a framework-agnostic, zero-dependency engine (~3 KB gzip, ESM, ships its own `styles.css`). Pick whichever adapter (or adapters) suits your stack — `core` is pulled in automatically as a dependency.",
     "coreLabel": "Core",
     "adaptersLabel": "Adapters",
     "items": {
       "core": {
         "name": "@love-rox/ptpt-core",
-        "role": "Framework-agnostic tokenizer",
-        "description": "The brain — decides which runs are patapata candidates. Used directly, it converts a string into a structured token stream. Every adapter wraps this core.",
+        "role": "Framework-agnostic engine",
+        "description": "The engine — `createCell`, `createBoard`, frames, presets, and delays. Zero dependencies, ESM, ~3 KB gzip, with pure functions like `computeFlipPath` exported for the curious. Every adapter is built on this.",
         "version": "v0.1.0"
       },
       "react": {
         "name": "@love-rox/ptpt-react",
-        "role": "React component",
-        "description": "A `<Patapata>` component for React 17+ that produces deterministic SSR-safe DOM.",
-        "tagline": "Wraps at runtime",
+        "role": "React components",
+        "description": "`<Patapata>`, `<PatapataBoard>`, and the `useFlipCell` hook. Client components (`\"use client\"`), so they slot into RSC setups like Waku and Next.js.",
+        "tagline": "Components + hook",
         "version": "v0.1.0"
       },
       "vue": {
         "name": "@love-rox/ptpt-vue",
-        "role": "Vue 3 component",
-        "description": "The same `<Patapata>` API for Vue 3 — identical options and behavior.",
-        "tagline": "Wraps at runtime",
+        "role": "Vue 3 components",
+        "description": "The same `<Patapata>` / `<PatapataBoard>` API for Vue 3, plus a `useFlipCell` composable — identical options, identical behavior.",
+        "tagline": "Components + composable",
         "version": "v0.1.0"
       },
       "rehype": {
         "name": "@love-rox/ptpt-rehype",
         "role": "rehype plugin",
-        "description": "Slots into a `unified` HAST pipeline so the wrapping happens at build time. No client runtime required.",
-        "tagline": "Wraps at build time",
+        "description": "Turns marked Markdown / HTML into split-flap boards. Emits readable text with `data-ptpt-*` at build time, then a `hydrate` helper animates it — no JS, still readable.",
+        "tagline": "Build-time + hydrate",
         "version": "v0.1.0"
       },
       "astro": {
         "name": "@love-rox/ptpt-astro",
-        "role": "Astro integration + component",
-        "description": "Registers the rehype plugin on Astro 4+'s Markdown / MDX pipeline, and ships a `<Patapata>` component for `.astro` files.",
+        "role": "Astro integration + components",
+        "description": "Wires up the Markdown plugin, injects the stylesheet, and runs the hydrator for you. Ships `Patapata.astro` and `PatapataBoard.astro` to drop a board straight into a template.",
         "tagline": "Astro-specific",
         "version": "v0.1.0",
         "isNew": true
@@ -62,22 +62,22 @@
     "viewLabel": "Open the page"
   },
   "shared": {
-    "heading": "One CSS rule everywhere",
-    "description": "No matter which adapter you choose, the generated `<span class=\"ptpt\">` elements need the same CSS. Including `-webkit-text-combine` keeps Safari happy."
+    "heading": "One stylesheet everywhere",
+    "description": "Import `@love-rox/ptpt-core/styles.css` once and every board gets a working dark split-flap look. Everything is themeable through custom properties on `.ptpt-cell` — width, height, flap duration, colors — or go fully headless and target the classes yourself."
   },
   "behavior": {
     "heading": "What's true across the board",
     "items": [
-      "Runs are not joined across element boundaries — `<em>12</em>34` produces two separate spans.",
-      "Full-width alphanumerics (`Ａ–Ｚ` / `０–９`) are left alone because they already render upright in vertical text.",
-      "React, Vue, and the Astro `<Patapata>` are SSR-safe: server and client emit the same DOM.",
-      "The rehype plugin (and the Astro integration that wraps it) is idempotent — running it twice on the same HAST gives the same output as running it once.",
-      "Runs filtered out by `maxLength` or `excludeWords` are demoted back to plain text and merged into the surrounding text segment automatically."
+      "**Frames** are the flaps — text, image, or `element` — each addressed by a `slug`; a bare string is normalized to a text frame.",
+      "A `Board` is one `role=\"status\"` live region: cells are `aria-hidden`, and only the settled result is announced to screen readers.",
+      "`prefers-reduced-motion` is honored automatically — `reducedMotion: 'instant'` snaps to the target without animating.",
+      "Presets and delay functions ship as tree-shakable subpaths, so adding more never grows your bundle.",
+      "Pass a `PresetDefinition` object to a preset, not a bare string — a string is read as literal flap characters, not a preset name."
     ]
   },
   "browser": {
     "heading": "Browser support",
-    "body": "`writing-mode: vertical-rl` and `text-combine-upright: all` are supported in all modern browsers. For Safari it's still worth including `-webkit-text-combine: horizontal` alongside the standard property."
+    "body": "The flip is built from `transform: rotateX()` and a moving `box-shadow` on three stacked half-cells — standard CSS supported across all modern browsers. No 3D libraries, no canvas, no dependencies."
   },
   "versioning": {
     "heading": "Shared version line",
@@ -89,7 +89,7 @@
   },
   "cta": {
     "heading": "See it in action",
-    "body": "The interactive demo lets you tweak options and compare the raw text with the `<Patapata>` output side by side.",
+    "body": "The interactive demo lets you pick a preset and a flip mode, then watch a row of cells ripple to the next destination — just like a real departure board.",
     "button": "Open the demo"
   }
 }

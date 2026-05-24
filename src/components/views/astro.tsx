@@ -32,16 +32,23 @@ import ptpt from "@love-rox/ptpt-astro";
 export default defineConfig({
   integrations: [
     ptpt({
-      preset: "alphanumeric",
+      // forward rehype options (e.g. a default preset name)
+      markdown: { defaultPreset: "alphanumeric" },
+      styles: true,
+      hydrate: true,
     }),
   ],
 });`;
 
 const componentSnippet = `---
 import Patapata from "@love-rox/ptpt-astro/Patapata.astro";
+import PatapataBoard from "@love-rox/ptpt-astro/PatapataBoard.astro";
 ---
 
-<Patapata preset="alphanumeric" target="TOKYO" />`;
+<!-- preset is a built-in preset NAME, resolved by the hydrator -->
+<Patapata target="TOKYO" preset="alphanumeric" />
+
+<PatapataBoard targets={\`TOKYO\\nOSAKA\`} preset="alphanumeric" />`;
 
 export default async function AstroView({ locale }: { locale: Locale }) {
   const content = data[locale];

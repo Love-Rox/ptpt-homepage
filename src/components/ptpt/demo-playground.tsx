@@ -119,8 +119,10 @@ export function DemoPlayground({ lang }: { lang: Lang }) {
   const width = preset === "digits" ? 4 : WIDTH;
   const targets = pad(current, width);
 
-  const markup = `<PatapataBoard
-  cellOptions={{ preset: "${preset}" }}
+  const markup = `import { presets } from "@love-rox/ptpt-core";
+
+<PatapataBoard
+  cellOptions={{ preset: presets.${preset} }}
   targets="${escape(targets)}"
   flipMode="${flipMode}"
 />`;

@@ -1,0 +1,49 @@
+name: Auto-merge owner PRs
+
+# GitHub's auto-merge feature does NOT honor ruleset bypass actors — it
+# always waits for required reviews to be approved before firing. Our
+# ruleset requires 1 approving review, but for owner PRs we want to
+# bypass that requirement automatically. Bypass rights only apply to
+# direct (--admin) merges, so we wait for CI to finish on the PR head
+# commit and then admin-merge as the App, which is in the bypass list.
+
+on:
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  merge:
+    if: >-
+      github.event.workflow_run.event == 'pull_request' &&
+      github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - id: app-token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.RELEASE_APP_ID }}
+          private-key: ${{ secrets.RELEASE_APP_PRIVATE_KEY }}
+
+      - name: Admin-merge owner PRs for this commit
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          REPO: ${{ github.repository }}
+          HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
+        run: |
+          set -euo pipefail
+          prs=$(gh api "repos/$REPO/commits/$HEAD_SHA/pulls" \
+                  --jq '.[] | select(.user.login == "sasagar" and .draft == false and .state == "open") | .number')
+          if [ -z "$prs" ]; then
+            echo "No matching open owner PR for $HEAD_SHA — nothing to do"
+            exit 0
+          fi
+          for pr in $prs; do
+            echo "Admin-merging PR #$pr"
+            gh pr merge --admin --squash --delete-branch "$pr" --repo "$REPO"
+          done

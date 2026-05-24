@@ -1,0 +1,47 @@
+{
+  "title": "@love-rox/ptpt-react — Tate-chu-yoko component for React",
+  "hero": {
+    "eyebrow": "React adapter",
+    "heading": "@love-rox/ptpt-react",
+    "tagline": "A `<Patapata>` component for React 17+. Walks children recursively and wraps half-width alphanumeric runs in `<span class=\"ptpt\">`. Produces deterministic, SSR-safe output.",
+    "version": "v0.1.0",
+    "ctaNpm": "View on npm",
+    "ctaGithub": "GitHub",
+    "ctaDemo": "Demo",
+    "backToFamily": "← Back to package family"
+  },
+  "install": {
+    "heading": "Install",
+    "description": "`@love-rox/ptpt-core` comes along as a dependency — no separate install needed."
+  },
+  "usage": {
+    "heading": "Usage",
+    "description": "Wrap the vertical content in `<Patapata>` inside an element with `writing-mode: vertical-rl`. Only string children are rewritten; element children are walked recursively without being touched.",
+    "snippetLabel": "React"
+  },
+  "options": {
+    "heading": "Options",
+    "description": "`<Patapata>` accepts the options below. The shared options behave identically to the Vue, rehype, and Astro adapters.",
+    "sharedLabel": "Shared options",
+    "componentLabel": "Component-only props",
+    "columns": {
+      "name": "Option",
+      "type": "Type",
+      "default": "Default",
+      "description": "Description"
+    }
+  },
+  "behavior": {
+    "heading": "Behavior notes",
+    "items": [
+      "Runs are not joined across element boundaries — `<em>12</em>34` produces two separate spans.",
+      "Full-width alphanumerics (`Ａ–Ｚ` / `０–９`) are left alone because they already render upright in vertical text.",
+      "SSR-safe — server and client emit the same DOM, so there's no hydration mismatch.",
+      "Children that contain React elements are still walked recursively; text inside those elements is processed too."
+    ]
+  },
+  "related": {
+    "heading": "Other adapters",
+    "description": "Using Vue? The Vue adapter has the same API. On a Markdown / Astro pipeline? The rehype and Astro adapters do this at build time, with no React dependency in the bundle."
+  }
+}

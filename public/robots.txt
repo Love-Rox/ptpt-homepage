@@ -1,0 +1,4 @@
+User-agent: *
+Disallow: /RSC/
+
+Sitemap: https://ptpt.love-rox.cc/sitemap.xml

@@ -1,0 +1,50 @@
+{
+  "title": "@love-rox/ptpt-rehype - unified パイプライン用のパタパタプラグイン",
+  "hero": {
+    "eyebrow": "rehype プラグイン",
+    "heading": "@love-rox/ptpt-rehype",
+    "tagline": "`unified` の HAST パイプラインに組み込んで、build 時にパタパタを適用する rehype プラグイン。Markdown / MDX / 静的 HTML — どこでも、クライアントランタイムなしで動きます。",
+    "version": "v0.1.0",
+    "ctaNpm": "npm で見る",
+    "ctaGithub": "GitHub",
+    "ctaDemo": "デモ",
+    "backToFamily": "← パッケージ一覧に戻る"
+  },
+  "install": {
+    "heading": "インストール",
+    "description": "`@love-rox/ptpt-core` は依存として自動的に引き込まれます。`unified` ベースのビルド（remark / rehype / Astro / eleventy など）で使えます。Astro 専用に最適化された API が必要な場合は [Astro 版](./astro) を使ってください。"
+  },
+  "usage": {
+    "heading": "Markdown パイプラインに組み込む",
+    "description": "`remark-rehype` のあと、HAST が確定したタイミングで `rehypePtpt` を挟むだけです。HTML として出力される時点で、パタパタラッピングは済んでいます。",
+    "snippetLabel": "Markdown → HTML",
+    "htmlOnlyHeading": "HTML だけのパイプライン",
+    "htmlOnlyDescription": "Markdown を介さず、HTML in / HTML out なら同じ要領で:",
+    "htmlOnlyLabel": "HTML → HTML"
+  },
+  "options": {
+    "heading": "オプション",
+    "description": "共通オプション（`target` / `combine` / `include` / `exclude` / `maxLength` / `excludeWords`）はすべて React / Vue / Astro と同じ意味で動きます。",
+    "sharedLabel": "共通オプション",
+    "pluginLabel": "rehype プラグイン専用オプション",
+    "columns": {
+      "name": "オプション",
+      "type": "型",
+      "default": "既定値",
+      "description": "説明"
+    }
+  },
+  "behavior": {
+    "heading": "挙動の注記",
+    "items": [
+      "**冪等です**。同じ HAST に2回プラグインを適用しても、出力は1回適用したときと同じ。span が二重になったりはしません。",
+      "`skipTags` のデフォルト（`code` / `pre` / `script` / `style`）が、コードサンプルや埋め込み JSON がパタパタ化されるのを防ぎます。",
+      "`<em>12</em>34` のように要素境界をまたぐ文字列は連結されず、別々のスパンになります。",
+      "`maxLength` / `excludeWords` で対象外になった run はプレーンテキストに戻り、隣接するテキストと自動的にマージされます。"
+    ]
+  },
+  "related": {
+    "heading": "Astro を使っているなら",
+    "description": "Astro 4+ で `.md` / `.mdx` / `.astro` を扱うなら、Markdown パイプラインへの登録と `<Patapata>` コンポーネントが同梱された [Astro インテグレーション](./astro) のほうが手数が少なく済みます。"
+  }
+}

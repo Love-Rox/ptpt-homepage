@@ -1,0 +1,447 @@
+/* tate-chu-yoko homepage — wa-modern design system
+ *
+ * Palette: 墨 (sumi) ink on 生成り (kinari) unbleached paper, with 朱 (shu) vermilion
+ * as the single warm accent. Translates Rox's orange family into a deeper, traditional
+ * cinnabar register without losing the warm-paper feel.
+ *
+ * Typography: Shippori Mincho B1 carries gravitas in display + vertical sample;
+ * Zen Kaku Gothic New is the modern Japanese body sans; Cormorant Garamond and
+ * Inter Tight pair Latin display + body; JetBrains Mono for code and package names.
+ */
+
+@import "@fontsource/shippori-mincho-b1/400.css";
+@import "@fontsource/shippori-mincho-b1/500.css";
+@import "@fontsource/shippori-mincho-b1/700.css";
+@import "@fontsource/shippori-mincho-b1/800.css";
+
+@import "@fontsource/zen-kaku-gothic-new/300.css";
+@import "@fontsource/zen-kaku-gothic-new/400.css";
+@import "@fontsource/zen-kaku-gothic-new/500.css";
+@import "@fontsource/zen-kaku-gothic-new/700.css";
+
+@import "@fontsource/cormorant-garamond/400.css";
+@import "@fontsource/cormorant-garamond/500.css";
+@import "@fontsource/cormorant-garamond/600-italic.css";
+
+@import "@fontsource/inter-tight/400.css";
+@import "@fontsource/inter-tight/500.css";
+@import "@fontsource/inter-tight/600.css";
+
+@import "@fontsource/jetbrains-mono/400.css";
+@import "@fontsource/jetbrains-mono/500.css";
+@import "@fontsource/jetbrains-mono/600.css";
+
+@import "tailwindcss";
+@plugin 'tailwindcss-react-aria-components';
+@plugin '@tailwindcss/typography';
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  /* —— breakpoints —— */
+  /* Add an `xs:` step at 380px for the very smallest phones — used by the
+     header wordmark to drop the secondary "tate-chu-yoko" caption when there
+     isn't room. */
+  --breakpoint-xs: 380px;
+
+  /* —— colour —— */
+  /* sumi 墨 (warm near-black) */
+  --color-ink: #1a1815;
+  --color-ink-mute: #6b6358;
+  --color-ink-soft: #aaa093;
+
+  /* kinari 生成り (unbleached paper warmth) */
+  --color-ground: #f4ede2;
+  --color-ground-deep: #ebe2d2;
+  --color-ground-card: #faf5eb;
+
+  /* shu 朱 (vermilion) */
+  --color-shu: #c8442f;
+  --color-shu-deep: #a83626;
+  --color-shu-soft: #e09c8c;
+  --color-shu-wash: #f6dcd2;
+
+  /* hairline rules */
+  --color-rule: rgba(26, 24, 21, 0.12);
+  --color-rule-strong: rgba(26, 24, 21, 0.32);
+
+  /* —— typography —— */
+  --font-mincho: "Shippori Mincho B1", "Yu Mincho", "Hiragino Mincho ProN", serif;
+  --font-gothic:
+    "Inter Tight", "Zen Kaku Gothic New", "Hiragino Sans", "Yu Gothic", system-ui, sans-serif;
+  --font-display: "Cormorant Garamond", "Shippori Mincho B1", serif;
+  --font-mono:
+    "JetBrains Mono", "SFMono-Regular", "Menlo", "Monaco", "Consolas", "Liberation Mono",
+    "Courier New", monospace;
+
+  /* —— motion —— */
+  --ease-paper: cubic-bezier(0.2, 0.65, 0.25, 1);
+}
+
+/* Dark mode: cream-on-deep-charcoal inversion. shu deepens slightly. */
+.dark {
+  --color-ink: #f4ede2;
+  --color-ink-mute: #b6ad9f;
+  --color-ink-soft: #6b6358;
+
+  --color-ground: #1c1a17;
+  --color-ground-deep: #14130f;
+  --color-ground-card: #252220;
+
+  --color-shu: #d6644f;
+  --color-shu-deep: #c8442f;
+  --color-shu-soft: #8a3e30;
+  --color-shu-wash: #3a1c14;
+
+  --color-rule: rgba(244, 237, 226, 0.16);
+  --color-rule-strong: rgba(244, 237, 226, 0.36);
+}
+
+/* —— base —— */
+html {
+  background-color: var(--color-ground);
+  color: var(--color-ink);
+  font-family: var(--font-gothic);
+  font-feature-settings:
+    "palt" 1,
+    "ss01" 1;
+  text-size-adjust: 100%;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-feature-settings: "palt" 1;
+  letter-spacing: 0.01em;
+  line-height: 1.85;
+}
+
+/* Subtle paper grain — lifts the cream ground from feeling like flat #f4ede2.
+   Disabled on dark mode where the texture muddies the deep charcoal. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image: radial-gradient(circle at 1px 1px, rgba(26, 24, 21, 0.06) 1px, transparent 0);
+  background-size: 5px 5px;
+  opacity: 0.4;
+  mix-blend-mode: multiply;
+}
+.dark body::before {
+  display: none;
+}
+
+/* Mincho headings by default — pages can opt-out per element. */
+h1,
+h2,
+h3 {
+  font-family: var(--font-mincho);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  line-height: 1.4;
+}
+
+h1 {
+  font-feature-settings: "palt" 1;
+}
+
+/* Selection: warm vermilion wash */
+::selection {
+  background-color: var(--color-shu-wash);
+  color: var(--color-ink);
+}
+
+/* —— vertical writing helpers (used by the demo + landing hero) —— */
+.tcy-vertical {
+  writing-mode: vertical-rl;
+  font-family: var(--font-mincho);
+  font-feature-settings:
+    "palt" 1,
+    "vert" 1;
+}
+
+.tcy span.tcy {
+  -webkit-text-combine: horizontal;
+  text-combine-upright: all;
+}
+
+/* —— prose overrides for blog posts —— */
+.prose {
+  font-family: var(--font-gothic);
+  color: var(--color-ink);
+  max-width: none;
+}
+
+.prose h1,
+.prose h2,
+.prose h3,
+.prose h4 {
+  font-family: var(--font-mincho);
+  color: var(--color-ink);
+}
+
+.prose h1 {
+  font-size: clamp(1.875rem, 4vw, 2.75rem);
+  line-height: 1.3;
+  margin-bottom: 1.5rem;
+  overflow-wrap: break-word;
+}
+
+.prose pre {
+  overflow-x: auto;
+  max-width: 100%;
+  white-space: pre;
+  word-wrap: normal;
+  background-color: var(--color-ink);
+  color: var(--color-ground);
+  border-radius: 0;
+  border-left: 2px solid var(--color-shu);
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+}
+
+.prose :not(pre) > code {
+  background-color: var(--color-ground-deep);
+  color: var(--color-shu-deep);
+  padding: 0.15em 0.4em;
+  border-radius: 2px;
+  font-weight: 500;
+  font-size: 0.875em;
+  border: none;
+  font-family: var(--font-mono);
+}
+
+.dark .prose :not(pre) > code {
+  background-color: var(--color-ground-card);
+  color: var(--color-shu);
+}
+
+.prose :not(pre) > code::before,
+.prose :not(pre) > code::after {
+  content: none;
+}
+
+.prose a {
+  color: var(--color-shu-deep);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+  text-decoration-color: var(--color-shu-soft);
+}
+
+.dark .prose a {
+  color: var(--color-shu);
+}
+
+.prose a:hover {
+  text-decoration-color: var(--color-shu);
+}
+
+.prose hr {
+  border: none;
+  border-top: 1px solid var(--color-rule);
+  margin: 3rem auto;
+  width: 4rem;
+}
+
+.prose ul li::marker,
+.prose ol li::marker {
+  color: var(--color-shu);
+}
+
+.prose blockquote {
+  border-left: 2px solid var(--color-shu);
+  font-family: var(--font-mincho);
+  color: var(--color-ink-mute);
+  padding-left: 1.25rem;
+  font-style: normal;
+}
+
+.prose blockquote p::before,
+.prose blockquote p::after {
+  content: none;
+}
+
+/* Tables: hairline grid, no fills. */
+.prose table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 0.875rem;
+}
+
+.prose th,
+.prose td {
+  border: none;
+  border-bottom: 1px solid var(--color-rule);
+  padding: 0.625rem 0.875rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+.prose th {
+  background-color: transparent;
+  border-bottom: 1px solid var(--color-rule-strong);
+  font-weight: 500;
+  color: var(--color-ink-mute);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 0.75rem;
+}
+
+/* —— GitHub-style alert blocks (kept for blog markdown) —— */
+.markdown-alert {
+  padding: 1rem 1.25rem;
+  margin: 1.5rem 0;
+  border-left: 2px solid var(--color-rule-strong);
+  background-color: var(--color-ground-card);
+}
+
+.dark .markdown-alert {
+  background-color: var(--color-ground-deep);
+}
+
+.markdown-alert-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  font-family: var(--font-gothic);
+  margin: 0 0 0.5rem 0;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  color: var(--color-ink-mute);
+}
+
+.markdown-alert-title svg {
+  fill: currentColor;
+  flex-shrink: 0;
+  width: 14px;
+  height: 14px;
+}
+
+.markdown-alert p {
+  margin: 0;
+  font-family: var(--font-gothic);
+  color: var(--color-ink);
+}
+
+.markdown-alert-note {
+  border-left-color: var(--color-shu-soft);
+}
+.markdown-alert-tip {
+  border-left-color: var(--color-shu);
+}
+.markdown-alert-important {
+  border-left-color: var(--color-shu-deep);
+}
+.markdown-alert-warning {
+  border-left-color: var(--color-shu);
+}
+.markdown-alert-caution {
+  border-left-color: var(--color-shu-deep);
+}
+
+/* —— ruby for the hero display heading ——————————————————————————
+   Each Kanji carries its English reading above it. We size the rt as a
+   small fraction of the parent so it scales with the headline and
+   pin it firmly above each glyph in tracked mono. */
+.ruby-display {
+  ruby-position: over;
+  ruby-align: center;
+  display: inline;
+}
+.ruby-display rt {
+  font-family: var(--font-mono);
+  font-size: 0.18em;
+  font-weight: 500;
+  color: var(--color-shu-deep);
+  letter-spacing: 0.18em;
+  text-transform: lowercase;
+  margin-bottom: 0.45em;
+  font-feature-settings: normal;
+}
+.dark .ruby-display rt {
+  color: var(--color-shu);
+}
+
+/* —— ambient pulse on the hero <Tcy> spans ————————————————————————
+   The vertical hero sample subtly breathes: each tcy-wrapped run
+   washes over with the lightest shu tint then fades, staggered so the
+   page feels gently alive without ever drawing attention to itself.
+   Disabled when the user prefers reduced motion. */
+@keyframes wa-tcy-pulse {
+  0%,
+  85%,
+  100% {
+    background-color: transparent;
+  }
+  20%,
+  35% {
+    background-color: var(--color-shu-wash);
+  }
+}
+
+.tcy-hero .tcy-vertical span.tcy {
+  animation: wa-tcy-pulse 7s var(--ease-paper) infinite;
+  border-radius: 1px;
+  padding: 0 0.05em;
+}
+.tcy-hero .tcy-vertical span.tcy:nth-of-type(2) {
+  animation-delay: 1.4s;
+}
+.tcy-hero .tcy-vertical span.tcy:nth-of-type(3) {
+  animation-delay: 2.8s;
+}
+.tcy-hero .tcy-vertical span.tcy:nth-of-type(4) {
+  animation-delay: 4.2s;
+}
+.tcy-hero .tcy-vertical span.tcy:nth-of-type(5) {
+  animation-delay: 5.6s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tcy-hero .tcy-vertical span.tcy {
+    animation: none;
+  }
+}
+
+/* —— page-load reveal: thin rule draws down, content fades up —— */
+@keyframes wa-rule-draw {
+  from {
+    transform: scaleY(0);
+    transform-origin: top;
+  }
+  to {
+    transform: scaleY(1);
+    transform-origin: top;
+  }
+}
+
+@keyframes wa-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(0.5rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.wa-fade-up {
+  animation: wa-fade-up 0.6s var(--ease-paper) both;
+}
+
+.wa-rule-draw {
+  animation: wa-rule-draw 0.9s var(--ease-paper) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wa-fade-up,
+  .wa-rule-draw {
+    animation: none;
+  }
+}

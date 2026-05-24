@@ -1,0 +1,14 @@
+{
+  "tagline": "Webに、パタパタ（反転フラップ）式ディスプレイの手触りを。Love-Rox から提供する小さなディスプレイライブラリ群。",
+  "sections": {
+    "packages": "パッケージ",
+    "community": "リンク"
+  },
+  "links": {
+    "demo": "インタラクティブデモ",
+    "blog": "ブログ",
+    "rox": "Rox 本体サイト"
+  },
+  "copyright": "© 2026 Love-Rox. MIT License.",
+  "builtWith": "Built with"
+}

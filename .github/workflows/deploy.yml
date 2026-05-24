@@ -1,0 +1,70 @@
+name: Deploy to Cloudflare Workers
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+  # Weekly safety-net rebuild so the prebuild step (scripts/fetch-versions.ts)
+  # picks up any new @love-rox/tcy-* npm releases even if the upstream
+  # dispatch failed. Mondays 06:00 UTC ≈ Mon 15:00 JST.
+  schedule:
+    - cron: "0 6 * * 1"
+  # Triggered by Love-Rox/tate-chu-yoko's release workflow once a new
+  # version is published to npm. Lets the docs site re-deploy within a
+  # minute of release instead of waiting for the weekly cron.
+  repository_dispatch:
+    types: [tcy-released]
+
+# Only one deploy at a time; cancel in-flight runs when a newer commit lands on main.
+concurrency:
+  group: deploy-cloudflare
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment:
+      name: production
+      url: https://love-rox.cc
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      # Wrangler requires Node.js >= 22 (the runner default is v20).
+      # We still install with Bun above; this only puts a recent Node on PATH
+      # so `bunx wrangler` works.
+      - name: Setup Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: "22"
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Build (Cloudflare adapter)
+        run: bun run build
+        env:
+          CLOUDFLARE: "1"
+          # Build-time public Turnstile site key — baked into the client bundle.
+          # Runtime secrets (TURNSTILE_SECRET_KEY, DISCORD_CONTACT_WEBHOOK_URL)
+          # live in Cloudflare's secret store and are read at request time.
+          VITE_TURNSTILE_SITE_KEY: ${{ secrets.VITE_TURNSTILE_SITE_KEY }}
+
+      - name: Deploy with wrangler
+        # Run from the project root: `waku build --with-cloudflare` writes
+        # .wrangler/deploy/config.json which points at dist/server/wrangler.json,
+        # and wrangler resolves it automatically. cd-ing into dist/server makes
+        # wrangler see two configs with conflicting base paths and abort.
+        run: bunx wrangler deploy
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}

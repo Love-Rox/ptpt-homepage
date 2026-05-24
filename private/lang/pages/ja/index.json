@@ -1,0 +1,95 @@
+{
+  "title": "patapata - パタパタを自動で組版するnpmパッケージ",
+  "hero": {
+    "eyebrow": "npm パッケージ",
+    "heading": "patapata",
+    "tagline": "日本語の縦組み本文で、半角英数字を自動的に「パタパタ」として組版する軽量ライブラリ。書き手はプレーンテキストのままで、組版はライブラリに任せましょう。",
+    "ctaDemo": "デモを触る",
+    "ctaNpm": "npm で見る",
+    "ctaGithub": "GitHub",
+    "badges": {
+      "version": "v0.1.0",
+      "license": "MIT",
+      "ssr": "SSR-safe"
+    }
+  },
+  "problem": {
+    "heading": "解決したいこと",
+    "body": "新聞や書籍の縦組みでは、半角英数字を横並びのまま正立させる「パタパタ」が当たり前に使われてきました。CSS には `text-combine-upright: all` があるものの、どの文字をまとめるかは開発者が明示しなければなりません。結果として、書き手が原稿の中で `<span class=\"ptpt\">` を毎回書く羽目になりがちです。patapata はこの組版処理を自動化し、書き手を組版の都合から解放します。"
+  },
+  "family": {
+    "heading": "5つの配布物",
+    "description": "中心にあるのは framework-agnostic なトークナイザー `@love-rox/ptpt-core`。スタックに合わせて好みのアダプタを1つ（または複数）選んでください。`core` は依存として自動的に引き込まれます。",
+    "coreLabel": "中心",
+    "adaptersLabel": "アダプタ",
+    "items": {
+      "core": {
+        "name": "@love-rox/ptpt-core",
+        "role": "Framework-agnostic トークナイザー",
+        "description": "「パタパタにすべき run はどれか」を判定するロジックの本体。直接使うときは文字列をトークン列に変換します。すべてのアダプタはこの core を内部で使っています。",
+        "version": "v0.1.0"
+      },
+      "react": {
+        "name": "@love-rox/ptpt-react",
+        "role": "React コンポーネント",
+        "description": "React 17+ で動く `<Patapata>` コンポーネント。SSR で決定性のある DOM を出力します。",
+        "tagline": "ランタイムで包む",
+        "version": "v0.1.0"
+      },
+      "vue": {
+        "name": "@love-rox/ptpt-vue",
+        "role": "Vue 3 コンポーネント",
+        "description": "Vue 3 向けの `<Patapata>`。React 版と同じオプション・同じ挙動。",
+        "tagline": "ランタイムで包む",
+        "version": "v0.1.0"
+      },
+      "rehype": {
+        "name": "@love-rox/ptpt-rehype",
+        "role": "rehype プラグイン",
+        "description": "`unified` の HAST パイプラインに組み込んで、build 時にパタパタを適用。クライアントランタイム不要。",
+        "tagline": "ビルド時に包む",
+        "version": "v0.1.0"
+      },
+      "astro": {
+        "name": "@love-rox/ptpt-astro",
+        "role": "Astro インテグレーション + コンポーネント",
+        "description": "Astro 4+ の Markdown / MDX パイプラインに rehype プラグインを自動登録。`.astro` 用の `<Patapata>` コンポーネントも同梱。",
+        "tagline": "Astro 専用",
+        "version": "v0.1.0",
+        "isNew": true
+      }
+    },
+    "viewLabel": "ページを見る"
+  },
+  "shared": {
+    "heading": "共通の CSS",
+    "description": "どのアダプタを使っても、生成される `<span class=\"ptpt\">` には同じ CSS を当ててください。Safari の歴史的経緯から `-webkit-text-combine` を併記しておくと安心です。"
+  },
+  "behavior": {
+    "heading": "全体に共通する性質",
+    "items": [
+      "`<em>12</em>34` のように要素境界をまたぐ文字列は連結されず、別々のスパンになります。",
+      "全角英数字（`Ａ〜Ｚ` / `０〜９`）は既定で対象外。縦組みでも既に正立して表示されるためです。",
+      "React / Vue / Astro `<Patapata>` のいずれも SSR-safe で、サーバーとクライアントで同じ DOM を生成します。",
+      "rehype プラグイン（および Astro インテグレーション内部）は冪等です。同じ HAST に2回適用しても出力は変わりません。",
+      "`maxLength` / `excludeWords` で対象外になった run はプレーンテキストに戻り、隣接するテキストと自動的にマージされます。"
+    ]
+  },
+  "browser": {
+    "heading": "ブラウザ対応",
+    "body": "`writing-mode: vertical-rl` と `text-combine-upright: all` は主要なモダンブラウザで動作します。Safari では歴史的に `-webkit-text-combine: horizontal` を併記しておくと安心です。"
+  },
+  "versioning": {
+    "heading": "バージョンの揃え方",
+    "body": "5 つのパッケージはバージョン番号を `@love-rox/ptpt-core` に揃えてリリースしています。「core は 0.3 だけど react は 0.2.5」のような不整合で迷わないよう、どれか一つでも変更があれば他もまとめて同じ番号に上がる運用です。"
+  },
+  "license": {
+    "heading": "ライセンス",
+    "body": "MIT License。個人・法人問わず自由に利用できます。"
+  },
+  "cta": {
+    "heading": "触ってみる",
+    "body": "設定を変えながらブラウザ上で挙動を確認できるデモを用意しました。",
+    "button": "デモページを開く"
+  }
+}

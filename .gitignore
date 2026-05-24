@@ -1,0 +1,18 @@
+node_modules
+dist
+.env*
+*.tsbuildinfo
+.cache
+.DS_Store
+*.pem
+public/sitemap.xml
+
+# Cloudflare / Wrangler
+.wrangler
+worker-configuration.d.ts
+.dev.vars
+
+# Claude Code (local agent files; not part of the project)
+.claude/
+CLAUDE.md
+CLAUDE.local.md

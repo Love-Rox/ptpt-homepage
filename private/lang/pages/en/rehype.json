@@ -1,0 +1,50 @@
+{
+  "title": "@love-rox/ptpt-rehype — Tate-chu-yoko plugin for unified pipelines",
+  "hero": {
+    "eyebrow": "rehype plugin",
+    "heading": "@love-rox/ptpt-rehype",
+    "tagline": "A rehype plugin that slots into a `unified` HAST pipeline and applies patapata at build time. Markdown, MDX, plain HTML — all without a client runtime.",
+    "version": "v0.1.0",
+    "ctaNpm": "View on npm",
+    "ctaGithub": "GitHub",
+    "ctaDemo": "Demo",
+    "backToFamily": "← Back to package family"
+  },
+  "install": {
+    "heading": "Install",
+    "description": "`@love-rox/ptpt-core` comes along as a dependency. Use this on any `unified`-based build (remark / rehype / Astro / eleventy / …). If you specifically want Astro ergonomics, the [Astro adapter](./astro) is purpose-built."
+  },
+  "usage": {
+    "heading": "Markdown pipeline",
+    "description": "Slot `rehypePtpt` in between `remark-rehype` and `rehype-stringify` (or wherever your pipeline finalizes HAST). The wrapping is baked into the HTML before it leaves the build.",
+    "snippetLabel": "Markdown → HTML",
+    "htmlOnlyHeading": "HTML-only pipeline",
+    "htmlOnlyDescription": "If there's no Markdown in the picture — just HTML in, HTML out — it's the same idea:",
+    "htmlOnlyLabel": "HTML → HTML"
+  },
+  "options": {
+    "heading": "Options",
+    "description": "The shared options — `target`, `combine`, `include`, `exclude`, `maxLength`, `excludeWords` — behave exactly as they do in the React, Vue, and Astro adapters.",
+    "sharedLabel": "Shared options",
+    "pluginLabel": "rehype plugin-only options",
+    "columns": {
+      "name": "Option",
+      "type": "Type",
+      "default": "Default",
+      "description": "Description"
+    }
+  },
+  "behavior": {
+    "heading": "Behavior notes",
+    "items": [
+      "**Idempotent**. Running the plugin twice on the same HAST gives the same output as running it once — no doubled spans.",
+      "The default `skipTags` (`code` / `pre` / `script` / `style`) keeps code samples and embedded JSON safe from accidental wrapping.",
+      "Runs are not joined across element boundaries — `<em>12</em>34` produces two separate spans.",
+      "Runs filtered out by `maxLength` or `excludeWords` are demoted back to plain text and merged into the surrounding text segment automatically."
+    ]
+  },
+  "related": {
+    "heading": "If you're on Astro",
+    "description": "If you're on Astro 4+ and dealing with `.md` / `.mdx` / `.astro`, the [Astro integration](./astro) wires up the Markdown pipeline and ships a `<Patapata>` component for `.astro` files — fewer moving parts to assemble yourself."
+  }
+}

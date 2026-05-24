@@ -1,0 +1,27 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "ptpt-homepage",
+  // Production domain: ptpt.love-rox.cc (custom domain attached in the
+  // Cloudflare dashboard / via deploy; no explicit routes block needed here).
+  "main": "./src/waku.server",
+  // nodejs_als: required for Waku's server-side request context (AsyncLocalStorage).
+  // nodejs_compat: required by gray-matter (fs) and vfile (node:url/path/process) which
+  // markdown-loader pulls in. The build warns "Unexpected Node.js imports" without it.
+  "compatibility_flags": ["nodejs_als", "nodejs_compat"],
+  // https://developers.cloudflare.com/workers/platform/compatibility-dates
+  "compatibility_date": "2025-11-17",
+  "assets": {
+    // https://developers.cloudflare.com/workers/static-assets/binding/
+    "binding": "ASSETS",
+    "directory": "./dist/public",
+    "html_handling": "drop-trailing-slash",
+  },
+  "rules": [
+    {
+      "type": "ESModule",
+      "globs": ["**/*.js", "**/*.mjs"],
+    },
+  ],
+  "no_bundle": true,
+  // No runtime secrets needed (no contact form, no Turnstile, no Discord webhook).
+}

@@ -1,0 +1,14 @@
+{
+  "tagline": "Bringing the feel of split-flap (patapata) displays to the web. A small family of display libraries from Love-Rox.",
+  "sections": {
+    "packages": "Packages",
+    "community": "Links"
+  },
+  "links": {
+    "demo": "Interactive demo",
+    "blog": "Blog",
+    "rox": "Rox main site"
+  },
+  "copyright": "© 2026 Love-Rox. MIT License.",
+  "builtWith": "Built with"
+}

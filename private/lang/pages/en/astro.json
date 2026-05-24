@@ -1,0 +1,67 @@
+{
+  "title": "@love-rox/ptpt-astro — Tate-chu-yoko integration for Astro",
+  "hero": {
+    "eyebrow": "Astro integration",
+    "heading": "@love-rox/ptpt-astro",
+    "tagline": "Astro 4+ only. Auto-registers the rehype plugin on Astro's Markdown / MDX pipeline, and ships a `<Patapata>` component for `.astro` files.",
+    "version": "v0.1.0",
+    "isNew": true,
+    "ctaNpm": "View on npm",
+    "ctaGithub": "GitHub",
+    "ctaDemo": "Demo",
+    "backToFamily": "← Back to package family"
+  },
+  "install": {
+    "heading": "Install",
+    "description": "Peer dependency: `astro >= 4`. `@love-rox/ptpt-core` and `@love-rox/ptpt-rehype` are pulled in automatically."
+  },
+  "twoPieces": {
+    "heading": "Two pieces",
+    "items": [
+      {
+        "name": "ptpt() integration",
+        "description": "Registers `@love-rox/ptpt-rehype` on Astro's Markdown / MDX pipeline so half-width alphanumerics in your `.md` and `.mdx` content are wrapped automatically at build time."
+      },
+      {
+        "name": "<Patapata> component",
+        "description": "An Astro component to wrap a slot inside `.astro` files explicitly — useful for body content authored directly in `.astro`, outside the Markdown pipeline."
+      }
+    ]
+  },
+  "usage": {
+    "heading": "Usage",
+    "description": "Register the integration in `astro.config.mjs`. That alone makes Markdown / MDX content patapata-aware.",
+    "integrationLabel": "astro.config.mjs",
+    "withOptionsHeading": "With options",
+    "withOptionsDescription": "Forward any `rehype-ptpt` options through the integration call.",
+    "withOptionsLabel": "astro.config.mjs (with options)",
+    "componentHeading": "Inside an `.astro` file",
+    "componentDescription": "For body content authored directly in `.astro` (no Markdown in the picture), use the `<Patapata>` component.",
+    "componentLabel": "src/pages/example.astro"
+  },
+  "options": {
+    "heading": "Options",
+    "description": "The shared options behave exactly as they do in the React / Vue / rehype adapters. There's just one integration-only knob.",
+    "sharedLabel": "Shared options + rehype passthrough",
+    "integrationLabel": "Integration-only",
+    "columns": {
+      "name": "Option",
+      "type": "Type",
+      "default": "Default",
+      "description": "Description"
+    }
+  },
+  "behavior": {
+    "heading": "Behavior notes",
+    "items": [
+      "Astro is SSG-first, so both pieces run at build time — there's no client-side cost.",
+      "Text inside `<code>` / `<pre>` / `<script>` / `<style>` is skipped by default (configurable via `skipTags`).",
+      "**Idempotent**. Rebuild the same Markdown as many times as you want; the output HTML doesn't drift.",
+      "The `<Patapata>` component delegates to the same `ptpt-rehype` underneath, so Markdown content and `.astro`-authored content behave identically."
+    ]
+  },
+  "related": {
+    "heading": "Other adapters",
+    "description": "Not using Astro? Drop the [rehype plugin](./rehype) directly into your `unified` pipeline. Need runtime wrapping in the app? Use the [React](./react) or [Vue](./vue) component."
+  }
+}

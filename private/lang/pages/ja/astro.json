@@ -1,0 +1,67 @@
+{
+  "title": "@love-rox/ptpt-astro - Astro 用のパタパタインテグレーション",
+  "hero": {
+    "eyebrow": "Astro インテグレーション",
+    "heading": "@love-rox/ptpt-astro",
+    "tagline": "Astro 4+ 専用。Markdown / MDX パイプラインに rehype プラグインを自動登録し、`.astro` ファイル用の `<Patapata>` コンポーネントも同梱します。",
+    "version": "v0.1.0",
+    "isNew": true,
+    "ctaNpm": "npm で見る",
+    "ctaGithub": "GitHub",
+    "ctaDemo": "デモ",
+    "backToFamily": "← パッケージ一覧に戻る"
+  },
+  "install": {
+    "heading": "インストール",
+    "description": "ピア依存は `astro >= 4` です。`@love-rox/ptpt-core` と `@love-rox/ptpt-rehype` は依存として自動的に引き込まれます。"
+  },
+  "twoPieces": {
+    "heading": "中身は2つ",
+    "items": [
+      {
+        "name": "ptpt() インテグレーション",
+        "description": "`@love-rox/ptpt-rehype` を Astro の Markdown / MDX パイプラインに登録します。`.md` / `.mdx` の本文中の半角英数字 run が、ビルド時に自動的にラップされます。"
+      },
+      {
+        "name": "<Patapata> コンポーネント",
+        "description": "`.astro` ファイル内の slot を明示的にラップしたいときに使う Astro コンポーネント。Markdown を介さない直書きの本文に。"
+      }
+    ]
+  },
+  "usage": {
+    "heading": "使い方",
+    "description": "まず `astro.config.mjs` でインテグレーションを登録します。これだけで Markdown / MDX 本文には自動でパタパタが適用されます。",
+    "integrationLabel": "astro.config.mjs",
+    "withOptionsHeading": "オプションを渡す",
+    "withOptionsDescription": "rehype プラグインに渡すオプションをそのまま指定できます。",
+    "withOptionsLabel": "astro.config.mjs（オプション付き）",
+    "componentHeading": ".astro ファイル内で使う",
+    "componentDescription": "Markdown を介さない直書きの本文には `<Patapata>` コンポーネントを使います。",
+    "componentLabel": "src/pages/example.astro"
+  },
+  "options": {
+    "heading": "オプション",
+    "description": "共通オプションは React / Vue / rehype と同じ意味で動きます。インテグレーション専用のオプションは1つだけです。",
+    "sharedLabel": "共通オプション + rehype 由来",
+    "integrationLabel": "インテグレーション専用",
+    "columns": {
+      "name": "オプション",
+      "type": "型",
+      "default": "既定値",
+      "description": "説明"
+    }
+  },
+  "behavior": {
+    "heading": "挙動の注記",
+    "items": [
+      "Astro は SSG-first なので、両方のピースともビルド時に走ります。クライアントへのコスト増はありません。",
+      "`<code>` / `<pre>` / `<script>` / `<style>` 内のテキストはデフォルトでスキップされます（`skipTags` で変更可）。",
+      "**冪等です**。同じ Markdown を何度ビルドしても、出力 HTML は変わりません。",
+      "`<Patapata>` コンポーネントは内部で同じ `ptpt-rehype` を呼んでいるので、Markdown 本文と `.astro` 直書きで挙動が揃います。"
+    ]
+  },
+  "related": {
+    "heading": "他のアダプタ",
+    "description": "Astro を使っていない場合は、生の [rehype プラグイン](./rehype) を直接 `unified` パイプラインに組み込んでください。アプリ側でランタイムに包みたいなら [React](./react) / [Vue](./vue) 版があります。"
+  }
+}

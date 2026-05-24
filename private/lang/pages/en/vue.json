@@ -1,0 +1,47 @@
+{
+  "title": "@love-rox/ptpt-vue — Tate-chu-yoko component for Vue 3",
+  "hero": {
+    "eyebrow": "Vue 3 adapter",
+    "heading": "@love-rox/ptpt-vue",
+    "tagline": "A `<Patapata>` component for Vue 3. Same options and same behavior as the React adapter — drops straight into a Vue app.",
+    "version": "v0.1.0",
+    "ctaNpm": "View on npm",
+    "ctaGithub": "GitHub",
+    "ctaDemo": "Demo",
+    "backToFamily": "← Back to package family"
+  },
+  "install": {
+    "heading": "Install",
+    "description": "`@love-rox/ptpt-core` comes along as a dependency — no separate install needed."
+  },
+  "usage": {
+    "heading": "Usage",
+    "description": "Import in `<script setup>` and use `<Patapata>` as a child of a vertically-written parent. Only string slot content is rewritten; element nodes are walked recursively without being touched.",
+    "snippetLabel": "Vue 3"
+  },
+  "options": {
+    "heading": "Options",
+    "description": "The Vue component accepts the exact same options as the React component. Shared options also line up 1:1 with the rehype and Astro adapters.",
+    "sharedLabel": "Shared options",
+    "componentLabel": "Component-only props",
+    "columns": {
+      "name": "Option",
+      "type": "Type",
+      "default": "Default",
+      "description": "Description"
+    }
+  },
+  "behavior": {
+    "heading": "Behavior notes",
+    "items": [
+      "Runs are not joined across element boundaries — `<em>12</em>34` produces two separate spans.",
+      "Full-width alphanumerics (`Ａ–Ｚ` / `０–９`) are left alone because they already render upright in vertical text.",
+      "SSR-safe — works under Nuxt 3 and other Vue SSR setups; server and client emit the same DOM.",
+      "Walks the slot's VNode tree recursively, only wrapping text nodes."
+    ]
+  },
+  "related": {
+    "heading": "Other adapters",
+    "description": "Using React? The React adapter has the same API. On a Markdown / Astro pipeline? The rehype and Astro adapters do this at build time, with no Vue dependency in the bundle."
+  }
+}

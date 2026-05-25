@@ -38,22 +38,25 @@
     "tailwindcss-react-aria-components": "^2.1.0",
     "waku": "^1.0.0-beta.0",
     "workers-og": "^0.0.27",
-    "wrangler": "^4.87.0"
+    "wrangler": "4.87.0"
   },
   "devDependencies": {
-    "@cloudflare/vite-plugin": "^1.35.0",
+    "@cloudflare/vite-plugin": "1.35.0",
     "@rolldown/plugin-babel": "^0.2.3",
     "@tailwindcss/vite": "^4.2.4",
     "@types/node": "^25.6.0",
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",
-    "@vitejs/plugin-react": "^6.0.1",
+    "@vitejs/plugin-react": "6.0.1",
     "babel-plugin-react-compiler": "1.0.0",
     "baseline-browser-mapping": "^2.10.25",
-    "miniflare": "^4.20260430.0",
+    "miniflare": "4.20260430.0",
     "tailwindcss": "^4.2.4",
     "typescript": "6.0.3",
-    "vite": "^8.0.10",
+    "vite": "8.0.10",
     "vite-plus": "^0.1.20"
+  },
+  "overrides": {
+    "rolldown": "1.0.0-rc.17"
   }
 }

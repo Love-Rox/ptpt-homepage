@@ -1,7 +1,7 @@
-import LandingView from "@/components/views/landing";
+import ReactView from "@/components/views/react";
 
 export default async function Page() {
-  return <LandingView locale="en" />;
+  return <ReactView locale="ja" />;
 }
 
 export const getConfig = async () => ({ render: "static" }) as const;

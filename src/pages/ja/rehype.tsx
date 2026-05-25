@@ -1,7 +1,7 @@
-import LandingView from "@/components/views/landing";
+import RehypeView from "@/components/views/rehype";
 
 export default async function Page() {
-  return <LandingView locale="en" />;
+  return <RehypeView locale="ja" />;
 }
 
 export const getConfig = async () => ({ render: "static" }) as const;

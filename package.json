@@ -58,6 +58,7 @@
   },
   "overrides": {
     "rolldown": "1.0.0-rc.17",
+    "@rolldown/pluginutils": "1.0.0-rc.17",
     "vite": "8.0.10"
   }
 }

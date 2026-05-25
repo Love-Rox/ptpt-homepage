@@ -1,7 +1,6 @@
 import "@/styles.css";
 
 import type { ReactNode } from "react";
-import { unstable_getContext } from "waku/server";
 import { Footer } from "@/components/global/footer";
 import { Header } from "@/components/global/header";
 import {
@@ -20,17 +19,16 @@ const description = {
   ja: "Webに、パタパタ（反転フラップ）式ディスプレイの手触りを。@love-rox/ptpt-* パッケージファミリーの公式サイト。",
 };
 
-export default async function RootLayout({ children }: { children: ReactNode }) {
-  const ctx = unstable_getContext() as { req?: { url?: string } } | undefined;
-  const url = ctx?.req?.url ?? "/";
-  const pathname = (() => {
-    try {
-      return new URL(url, "https://ptpt.love-rox.cc").pathname;
-    } catch {
-      return "/";
-    }
-  })();
-  const lang = detectLocale(pathname);
+export default async function RootLayout({
+  children,
+  path,
+}: {
+  children: ReactNode;
+  path?: string;
+}) {
+  // Static build: derive locale from the route path waku renders this layout
+  // for. Falls back to the default locale when path isn't provided.
+  const lang = detectLocale(path ?? "/");
   const navItems = navData[lang].items;
 
   return (
@@ -72,5 +70,5 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
 }
 
 export const getConfig = async () => {
-  return { render: "dynamic" } as const;
+  return { render: "static" } as const;
 };

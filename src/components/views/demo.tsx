@@ -1,5 +1,6 @@
 import { Link } from "waku";
 import { Meta } from "@/components/global/meta";
+import { PageShell } from "@/components/global/page-shell";
 import { Breadcrumbs, generateBreadcrumbItems } from "@/components/common/breadcrumbs";
 import { BreadcrumbSchema } from "@/components/seo/structured-data";
 import { DemoPlayground } from "@/components/ptpt/demo-playground";
@@ -34,56 +35,61 @@ export default async function DemoView({ locale }: { locale: Locale }) {
   const packageUrl = localePath(locale, "");
 
   return (
-    <div className="relative">
-      <Meta
-        title={content.metaTitle}
-        description={content.description.replace(/<\/?[^>]+>/g, "")}
-        image={`/api/og?title=${encodeURIComponent(content.metaTitle)}&eyebrow=${encodeURIComponent(content.packageLabel + " · " + content.demoLabel)}`}
-        url={url}
-        lang={locale}
-      />
-      <BreadcrumbSchema
-        items={generateBreadcrumbItems(
-          [
-            { label: content.packageLabel, href: packageUrl },
-            { label: content.demoLabel, href: url },
-          ],
-          locale,
-        )}
-      />
-
-      <div className="px-5 sm:px-6 lg:px-12 max-w-6xl mx-auto pt-8 sm:pt-10 lg:pt-14">
-        <Breadcrumbs
-          items={[{ label: content.packageLabel, href: packageUrl }, { label: content.demoLabel }]}
+    <PageShell lang={locale}>
+      <div className="relative">
+        <Meta
+          title={content.metaTitle}
+          description={content.description.replace(/<\/?[^>]+>/g, "")}
+          image={`/api/og?title=${encodeURIComponent(content.metaTitle)}&eyebrow=${encodeURIComponent(content.packageLabel + " · " + content.demoLabel)}`}
+          url={url}
           lang={locale}
         />
-      </div>
+        <BreadcrumbSchema
+          items={generateBreadcrumbItems(
+            [
+              { label: content.packageLabel, href: packageUrl },
+              { label: content.demoLabel, href: url },
+            ],
+            locale,
+          )}
+        />
 
-      <div className="px-5 sm:px-6 lg:px-12 max-w-6xl mx-auto pb-20 sm:pb-24">
-        <header className="mb-14 wa-fade-up" style={{ animationDelay: "120ms" }}>
-          <p className="font-mono text-[11px] uppercase tracking-[0.3em] text-shu-deep dark:text-shu mb-5">
-            {content.eyebrow}
-          </p>
-          <h1 className="font-mincho text-[2rem] sm:text-[2.75rem] lg:text-[3.5rem] leading-[1.15] text-ink mb-5 sm:mb-6 max-w-3xl">
-            {content.heading}
-          </h1>
-          <p className="font-gothic text-base text-ink-mute leading-[1.85] max-w-2xl">
-            {content.description}
-          </p>
-          <span aria-hidden="true" className="board-seam block w-full mt-8" />
-        </header>
+        <div className="px-5 sm:px-6 lg:px-12 max-w-6xl mx-auto pt-8 sm:pt-10 lg:pt-14">
+          <Breadcrumbs
+            items={[
+              { label: content.packageLabel, href: packageUrl },
+              { label: content.demoLabel },
+            ]}
+            lang={locale}
+          />
+        </div>
 
-        <DemoPlayground lang={locale} />
+        <div className="px-5 sm:px-6 lg:px-12 max-w-6xl mx-auto pb-20 sm:pb-24">
+          <header className="mb-14 wa-fade-up" style={{ animationDelay: "120ms" }}>
+            <p className="font-mono text-[11px] uppercase tracking-[0.3em] text-shu-deep dark:text-shu mb-5">
+              {content.eyebrow}
+            </p>
+            <h1 className="font-mincho text-[2rem] sm:text-[2.75rem] lg:text-[3.5rem] leading-[1.15] text-ink mb-5 sm:mb-6 max-w-3xl">
+              {content.heading}
+            </h1>
+            <p className="font-gothic text-base text-ink-mute leading-[1.85] max-w-2xl">
+              {content.description}
+            </p>
+            <span aria-hidden="true" className="board-seam block w-full mt-8" />
+          </header>
 
-        <div className="mt-16 pt-10" style={{ borderTop: "1px solid var(--color-rule)" }}>
-          <Link
-            to={packageUrl as `/${string}`}
-            className="font-gothic text-sm text-ink-mute hover:text-shu-deep dark:hover:text-shu transition-colors underline decoration-rule decoration-from-font underline-offset-4"
-          >
-            {content.backToPackage}
-          </Link>
+          <DemoPlayground lang={locale} />
+
+          <div className="mt-16 pt-10" style={{ borderTop: "1px solid var(--color-rule)" }}>
+            <Link
+              to={packageUrl as `/${string}`}
+              className="font-gothic text-sm text-ink-mute hover:text-shu-deep dark:hover:text-shu transition-colors underline decoration-rule decoration-from-font underline-offset-4"
+            >
+              {content.backToPackage}
+            </Link>
+          </div>
         </div>
       </div>
-    </div>
+    </PageShell>
   );
 }

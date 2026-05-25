@@ -1,70 +1,33 @@
 import "@/styles.css";
 
 import type { ReactNode } from "react";
-import { Footer } from "@/components/global/footer";
-import { Header } from "@/components/global/header";
 import {
   WebSiteSchema,
   OrganizationSchema,
   SoftwareApplicationSchema,
 } from "@/components/seo/structured-data";
-import { detectLocale } from "@/lib/locale";
-import navJa from "@private/lang/components/global/ja/nav.json";
-import navEn from "@private/lang/components/global/en/nav.json";
 
-const navData = { ja: navJa, en: navEn };
+// Static root layout: provides the document shell only. Per-locale chrome
+// (header/footer/nav) lives in <PageShell>, rendered by each view with the
+// route's locale — the static layout can't know the locale itself. <html lang>
+// ships as "en" and is corrected per page by <HtmlLang> on the client.
+const description =
+  "patapata: a split-flap (solari / departure-board) display library for the web. Official site for the @love-rox/ptpt-* package family.";
 
-const description = {
-  en: "patapata: a split-flap (solari / departure-board) display library for the web. Official site for the @love-rox/ptpt-* package family.",
-  ja: "Webに、パタパタ（反転フラップ）式ディスプレイの手触りを。@love-rox/ptpt-* パッケージファミリーの公式サイト。",
-};
-
-export default async function RootLayout({
-  children,
-  path,
-}: {
-  children: ReactNode;
-  path?: string;
-}) {
-  // Static build: derive locale from the route path waku renders this layout
-  // for. Falls back to the default locale when path isn't provided.
-  const lang = detectLocale(path ?? "/");
-  const navItems = navData[lang].items;
-
+export default async function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang={lang}>
+    <html lang="en">
       <head>
-        <meta name="description" content={description[lang]} />
+        <meta name="description" content={description} />
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
         <link rel="alternate icon" type="image/png" href="/images/favicon.png" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
-        <WebSiteSchema lang={lang} />
+        <WebSiteSchema lang="en" />
         <OrganizationSchema />
         <SoftwareApplicationSchema />
       </head>
-      <body className="bg-ground text-ink antialiased">
-        <div className="relative min-h-screen flex flex-col">
-          {/* terminal edge — an amber signal rail pinned to the right edge,
-              like the lit trim down the side of a departures board. Hidden on
-              small screens to avoid overlapping body content. */}
-          <div
-            aria-hidden="true"
-            className="hidden md:flex fixed top-0 bottom-0 right-0 z-30 w-6 bg-shu items-end justify-center pb-6 pointer-events-none"
-          >
-            <span
-              className="font-mono text-[10px] text-ground tracking-[0.3em] uppercase select-none"
-              style={{ writingMode: "vertical-rl" }}
-            >
-              departures · @love-rox/ptpt
-            </span>
-          </div>
-
-          <Header lang={lang} navItems={navItems} />
-          <main className="flex-1 *:min-h-64 lg:min-h-svh">{children}</main>
-          <Footer lang={lang} />
-        </div>
-      </body>
+      <body className="bg-ground text-ink antialiased">{children}</body>
     </html>
   );
 }

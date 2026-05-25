@@ -57,6 +57,7 @@
     "vite-plus": "^0.1.20"
   },
   "overrides": {
-    "rolldown": "1.0.0-rc.17"
+    "rolldown": "1.0.0-rc.17",
+    "vite": "8.0.10"
   }
 }

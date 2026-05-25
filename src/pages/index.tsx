@@ -1,7 +1,5 @@
-import LandingView from "@/components/views/landing";
-
 export default async function Page() {
-  return <LandingView locale="en" />;
+  return <main>PTPT_SINGLE_ROUTE_TEST — if this is server-rendered, RSC works.</main>;
 }
 
 export const getConfig = async () => ({ render: "static" }) as const;

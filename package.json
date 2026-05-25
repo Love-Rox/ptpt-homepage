@@ -21,8 +21,8 @@
     "@fontsource/biz-udgothic": "^5.2.5",
     "@fontsource/martian-mono": "^5.2.5",
     "@fontsource/saira-condensed": "^5.2.5",
-    "@love-rox/ptpt-core": "file:../ptpt/packages/ptpt-core",
-    "@love-rox/ptpt-react": "file:../ptpt/packages/ptpt-react",
+    "@love-rox/ptpt-core": "^0.1.0",
+    "@love-rox/ptpt-react": "^0.1.0",
     "@tailwindcss/typography": "^0.5.19",
     "gray-matter": "^4.0.3",
     "react": "^19.2.5",
@@ -55,8 +55,5 @@
     "typescript": "6.0.3",
     "vite": "^8.0.10",
     "vite-plus": "^0.1.20"
-  },
-  "overrides": {
-    "@love-rox/ptpt-core": "file:../ptpt/packages/ptpt-core"
   }
 }

@@ -1,0 +1,59 @@
+name: Deploy to Cloudflare Workers
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+  # Weekly safety-net rebuild so the prebuild step (scripts/fetch-versions.ts)
+  # re-fetches the latest @love-rox/ptpt-* versions for the badges.
+  # Mondays 06:00 UTC ≈ Mon 15:00 JST.
+  schedule:
+    - cron: "0 6 * * 1"
+
+# Only one deploy at a time; cancel in-flight runs when a newer commit lands.
+concurrency:
+  group: deploy-cloudflare
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment:
+      name: production
+      url: https://ptpt.love-rox.cc
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      # wrangler needs Node.js >= 22 on PATH (the runner default is older).
+      - name: Setup Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: "22"
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      # CLOUDFLARE=1 selects Waku's Cloudflare adapter (also baked into the
+      # build script, kept here for parity with the rest of the matrix).
+      - name: Build (Cloudflare adapter)
+        run: bun run build
+        env:
+          CLOUDFLARE: "1"
+
+      - name: Deploy with wrangler
+        # Run from the project root so wrangler resolves .wrangler/deploy/config.json
+        # (→ dist/server/wrangler.json) automatically.
+        run: bunx wrangler deploy
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}

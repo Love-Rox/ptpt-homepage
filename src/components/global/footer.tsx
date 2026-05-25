@@ -36,7 +36,9 @@ export const Footer = ({ lang = "en" }: { lang?: Locale }) => {
                 <p className="font-display text-3xl text-ink leading-none uppercase tracking-wide">
                   パタパタ
                 </p>
-                <p className="font-mono text-[11px] text-ink-mute tracking-[0.18em] mt-1">patapata</p>
+                <p className="font-mono text-[11px] text-ink-mute tracking-[0.18em] mt-1">
+                  patapata
+                </p>
               </span>
             </div>
             <p className="font-gothic text-sm text-ink-mute leading-relaxed max-w-md">

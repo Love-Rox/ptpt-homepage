@@ -197,7 +197,10 @@ export default async function LandingView({ locale }: { locale: Locale }) {
                   </p>
                 </div>
                 <div className="col-span-3 sm:col-span-1">
-                  <span className="flap-chip text-shu-deep dark:text-shu" style={{ fontSize: "13px" }}>
+                  <span
+                    className="flap-chip text-shu-deep dark:text-shu"
+                    style={{ fontSize: "13px" }}
+                  >
                     {row.gate}
                   </span>
                 </div>

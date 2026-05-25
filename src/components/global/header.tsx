@@ -19,8 +19,21 @@ interface HeaderProps {
 /** Small split-flap roundel used as the terminal mark. */
 function HeaderRoundel() {
   return (
-    <svg width="26" height="26" viewBox="0 0 64 64" aria-hidden="true" className="select-none flex-none">
-      <circle cx="32" cy="32" r="30" fill="var(--color-ground-deep)" stroke="var(--color-shu)" strokeWidth="2" />
+    <svg
+      width="26"
+      height="26"
+      viewBox="0 0 64 64"
+      aria-hidden="true"
+      className="select-none flex-none"
+    >
+      <circle
+        cx="32"
+        cy="32"
+        r="30"
+        fill="var(--color-ground-deep)"
+        stroke="var(--color-shu)"
+        strokeWidth="2"
+      />
       <rect x="22" y="19" width="20" height="26" rx="2.5" fill="var(--color-ink)" />
       <text
         x="32"
@@ -72,7 +85,9 @@ export const Header = ({ lang, navItems = [] }: HeaderProps) => {
           className="group flex items-center gap-2.5 -ml-1 px-1 transition-opacity hover:opacity-80"
         >
           <HeaderRoundel />
-          <span className="font-display text-xl text-ink leading-none tracking-wide uppercase">パタパタ</span>
+          <span className="font-display text-xl text-ink leading-none tracking-wide uppercase">
+            パタパタ
+          </span>
           <span aria-hidden="true" className="hidden xs:block w-px h-4 bg-shu" />
           <span className="hidden xs:inline font-mono text-[11px] text-ink-mute tracking-[0.18em]">
             patapata

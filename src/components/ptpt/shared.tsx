@@ -125,8 +125,22 @@ export function StatusPill({
  *  cell caught mid-glyph. Replaces the old 落款印 seal. */
 export function Roundel({ size = 56 }: { size?: number }) {
   return (
-    <svg width={size} height={size} viewBox="0 0 64 64" role="img" aria-label="ptpt" className="select-none">
-      <circle cx="32" cy="32" r="30" fill="var(--color-ground-deep)" stroke="var(--color-shu)" strokeWidth="1.5" />
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 64 64"
+      role="img"
+      aria-label="ptpt"
+      className="select-none"
+    >
+      <circle
+        cx="32"
+        cy="32"
+        r="30"
+        fill="var(--color-ground-deep)"
+        stroke="var(--color-shu)"
+        strokeWidth="1.5"
+      />
       <circle cx="32" cy="32" r="24.5" fill="none" stroke="var(--color-rule)" strokeWidth="1" />
       <rect x="22" y="19" width="20" height="26" rx="2.5" fill="var(--color-ink)" />
       <text
@@ -436,7 +450,9 @@ export function AdapterNav({ current, locale }: { current: AdapterKey; locale: L
                   to={a.href(locale) as `/${string}`}
                   className={[
                     "flex items-center gap-2 px-3 sm:px-4 py-2 font-mono text-[13px] whitespace-nowrap transition-colors relative",
-                    active ? "text-ink font-medium" : "text-ink-mute hover:text-ink dark:hover:text-ink",
+                    active
+                      ? "text-ink font-medium"
+                      : "text-ink-mute hover:text-ink dark:hover:text-ink",
                   ].join(" ")}
                 >
                   {active && <span aria-hidden="true" className="pill-lamp text-shu" />}

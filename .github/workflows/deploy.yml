@@ -27,16 +27,16 @@ jobs:
       url: https://ptpt.love-rox.cc
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7.0.1
 
       - name: Setup Bun
-        uses: oven-sh/setup-bun@v2
+        uses: oven-sh/setup-bun@v2.2.0
         with:
           bun-version: latest
 
       # wrangler needs Node.js >= 22 on PATH (the runner default is older).
       - name: Setup Node.js
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@v7.1.0
         with:
           node-version: "22"
 
